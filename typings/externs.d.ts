@@ -103,10 +103,14 @@ declare global {
 
     export interface TraceEvent {
       name: string;
-      args: any;
-      tid: number;
+      ph: string;
+      args?: any;
+      pid: number;
+      tid?: number;
       ts: number;
-      dur: number;
+      dur?: number;
+      cat: string;
+      tts?: number;
     }
 
     export interface NetworkRequest {
@@ -116,18 +120,28 @@ declare global {
 
       url: string;
       protocol: string;
+      statusCode: number;
+      requestMethod: string;
+      mimeType: string;
+
       origin: string | null;
       parsedURL: DevToolsParsedURL;
 
       startTime: number;
       endTime: number;
-
-      transferSize: number;
+      issueTime(): number;
+      responseReceivedTime: number;
 
       _initiator: NetworkRequestInitiator;
       _timing: NetworkRequestTiming;
+      timing: NetworkRequestTiming;
       _resourceType: any;
       priority(): 'VeryHigh' | 'High' | 'Medium' | 'Low';
+
+      transferSize: number;
+      resourceSize: number;
+      fetchedViaServiceWorker: boolean;
+      failed: boolean;
     }
 
     export interface NetworkRequestInitiator {

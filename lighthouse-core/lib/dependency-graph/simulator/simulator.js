@@ -12,6 +12,9 @@ const TcpConnection = require('./tcp-connection');
 const ConnectionPool = require('./connection-pool');
 const emulation = require('../../emulation').settings;
 
+const generateTrace = require('../../../scripts/generate-trace');
+const pagedepgraph = require('../../../gather/computed/page-dependency-graph');
+
 // see https://cs.chromium.org/search/?q=kDefaultMaxNumDelayableRequestsPerClient&sq=package:chromium&type=cs
 const DEFAULT_MAXIMUM_CONCURRENT_REQUESTS = 10;
 
@@ -333,6 +336,9 @@ class Simulator {
         this._updateProgressMadeInTimePeriod(node, minimumTime, totalElapsedTime);
       }
     }
+
+    const rand = Math.round(Math.random()*100);
+    generateTrace.saveTraceOfGraph(rootNode, this._nodeTiming, `depgraph.${rand}.json`);
 
     return {
       timeInMs: totalElapsedTime,

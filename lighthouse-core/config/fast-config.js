@@ -23,7 +23,7 @@ module.exports = {
       'load-fast-enough-for-pwa',
     ],
     // skip a11y for now because it's too slow and not in PSI-parity set
-    onlyCategories: ['performance', 'pwa', 'best-practices'],
+    onlyCategories: ['performance'],
   },
   passes: [
     {
