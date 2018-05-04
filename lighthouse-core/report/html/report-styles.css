@@ -290,31 +290,8 @@
   display: none;
 }
 
-/* Perf Timeline */
 
-.lh-timeline-container {
-  overflow: hidden;
-  border-top: 1px solid var(--metric-timeline-rule-color);
-}
-
-.lh-timeline {
-  padding: 0;
-  padding-bottom: 0;
-  width: calc(var(--lh-filmstrip-thumbnail-width) * 10 + var(--default-padding) * 2);
-  margin: 0 auto;
-}
-
-.lh-narrow .lh-timeline-container {
-  width: calc(100vw - var(--section-padding) * 2);
-  overflow-x: scroll;
-}
-
-.lh-devtools .lh-timeline-container {
-  width: 100%;
-  overflow-x: scroll;
-}
-
-/* Perf Timeline Metric */
+/* Perf Metric */
 
 .lh-metric-container {
   display: flex;
@@ -523,6 +500,12 @@
 
 
 /* Filmstrip */
+
+.lh-filmstrip-container {
+  padding: 0 var(--expandable-indent);
+  margin: 0 auto;
+}
+
 
 .lh-filmstrip {
   display: flex;

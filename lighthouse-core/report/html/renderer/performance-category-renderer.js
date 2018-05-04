@@ -125,7 +125,7 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
     const filmStripHeader = this.dom.createChildOf(element, 'div', 'lh-audit-group__header');
     filmStripHeader.textContent = 'Filmstrip';
 
-    const timelineEl = this.dom.createChildOf(element, 'div', 'lh-timeline');
+    const timelineEl = this.dom.createChildOf(element, 'div', 'lh-filmstrip-container');
     const thumbnailAudit = category.audits.find(audit => audit.id === 'screenshot-thumbnails');
     const thumbnailResult = thumbnailAudit && thumbnailAudit.result;
     if (thumbnailResult && thumbnailResult.details) {
