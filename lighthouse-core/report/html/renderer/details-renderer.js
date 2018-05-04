@@ -253,19 +253,11 @@ class DetailsRenderer {
 
     for (const thumbnail of details.items) {
       const frameEl = this._dom.createChildOf(filmstripEl, 'div', 'lh-filmstrip__frame');
-
-      let timing = Util.formatMilliseconds(thumbnail.timing, 1);
-      if (thumbnail.timing > 1000) {
-        timing = Util.formatNumber(thumbnail.timing / 1000) + ' s';
-      }
-
-      const base64data = thumbnail.data;
       this._dom.createChildOf(frameEl, 'img', 'lh-filmstrip__thumbnail', {
-        src: `data:image/jpeg;base64,${base64data}`,
-        alt: `Screenshot at ${timing}`,
+        src: `data:image/jpeg;base64,${thumbnail.data}`,
+        alt: `Screenshot`,
       });
     }
-
     return filmstripEl;
   }
 
