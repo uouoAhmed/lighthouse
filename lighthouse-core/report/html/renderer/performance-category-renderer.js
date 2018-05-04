@@ -99,11 +99,6 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
     // Metrics
     const metricAudits = category.audits.filter(audit => audit.group === 'metrics');
     const metricAuditsEl = this.renderAuditGroup(groups['metrics'], {expandable: false});
-    const disclaimer = this.dom.createChildOf(metricAuditsEl, 'div',
-        'lh-metrics__disclaimer lh-metrics__disclaimer--head');
-    disclaimer.textContent = 'Computed values may vary. ';
-    const link = this.dom.createChildOf(disclaimer, 'a', '', {href: 'https://github.com/GoogleChrome/lighthouse/blob/master/docs/scoring.md'});
-    link.textContent = 'Learn more';
 
     const keyMetrics = metricAudits.filter(a => a.weight >= 3);
     const otherMetrics = metricAudits.filter(a => a.weight < 3);
@@ -121,7 +116,7 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
 
     const estValuesEl = this.dom.createChildOf(metricsColumn2El, 'div',
         'lh-metrics__disclaimer lh-metrics__disclaimer--foot');
-    estValuesEl.textContent = 'Values: Estimated';
+    estValuesEl.textContent = 'Estimated values may vary. ';
 
     metricAuditsEl.open = true;
     element.appendChild(metricAuditsEl);
