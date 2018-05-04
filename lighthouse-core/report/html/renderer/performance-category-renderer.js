@@ -119,12 +119,10 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
     estValuesEl.textContent = 'Estimated values may vary. ';
 
     metricAuditsEl.open = true;
+    metricAuditsEl.classList.add('lh-audit-group--adorned', 'lh-audit-group--metrics');
     element.appendChild(metricAuditsEl);
 
     // Filmstrip
-    const filmStripHeader = this.dom.createChildOf(element, 'div', 'lh-audit-group__header');
-    filmStripHeader.textContent = 'Filmstrip';
-
     const timelineEl = this.dom.createChildOf(element, 'div', 'lh-filmstrip-container');
     const thumbnailAudit = category.audits.find(audit => audit.id === 'screenshot-thumbnails');
     const thumbnailResult = thumbnailAudit && thumbnailAudit.result;
@@ -150,6 +148,7 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
       opportunityAudits.forEach((item, i) =>
           groupEl.appendChild(this._renderOpportunity(item, i, scale)));
       groupEl.open = true;
+      groupEl.classList.add('lh-audit-group--adorned', 'lh-audit-group--opportunities');
       element.appendChild(groupEl);
     }
 
@@ -166,9 +165,11 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
       const groupEl = this.renderAuditGroup(groups['diagnostics'], {expandable: false});
       diagnosticAudits.forEach((item, i) => groupEl.appendChild(this.renderAudit(item, i)));
       groupEl.open = true;
+      groupEl.classList.add('lh-audit-group--adorned', 'lh-audit-group--diagnostics');
       element.appendChild(groupEl);
     }
 
+    // Passed audits
     const passedElements = category.audits
         .filter(audit => (audit.group === 'load-opportunities' || audit.group === 'diagnostics') &&
             audit.result.score === 1)

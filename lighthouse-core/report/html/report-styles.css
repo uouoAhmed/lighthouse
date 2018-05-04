@@ -32,6 +32,7 @@
   --informative-color: #0c50c7;
   --medium-75-gray: #757575;
   --medium-50-gray: hsl(210, 17%, 98%);
+  --medium-100-gray: hsl(200, 12%, 95%);
   --warning-color: #ffab00; /* md amber a700 */
   --report-border-color: #ccc;
   --report-secondary-border-color: #ebebeb;
@@ -63,6 +64,17 @@
   --average-icon-url: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><title>info</title><path fill="hsl(31, 100%, 45%)" d="M24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm2 30h-4V22h4v12zm0-16h-4v-4h4v4z"/></svg>');
   --fail-icon-url: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><title>warn</title><path fill="hsl(1, 73%, 45%)" d="M2 42h44L24 4 2 42zm24-6h-4v-4h4v4zm0-8h-4v-8h4v8z"/></svg>');
   --chevron-icon-url: url('data:image/svg+xml;utf8,<svg fill="hsl(0, 0%, 62%)" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/><path d="M0-.25h24v24H0z" fill="none"/></svg>');
+
+
+  --av-timer-icon-url: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><path d="M0 0h48v48H0z" fill="none"/><path d="M22 34c0 1.1.9 2 2 2s2-.9 2-2-.9-2-2-2-2 .9-2 2zm0-28v8h4v-3.84c6.78.97 12 6.79 12 13.84 0 7.73-6.27 14-14 14s-14-6.27-14-14c0-3.36 1.18-6.43 3.15-8.85L24 26l2.83-2.83-13.6-13.6-.02.04C8.84 12.89 6 18.11 6 24c0 9.94 8.04 18 17.99 18S42 33.94 42 24 33.94 6 23.99 6H22zm14 18c0-1.1-.9-2-2-2s-2 .9-2 2 .9 2 2 2 2-.9 2-2zm-24 0c0 1.1.9 2 2 2s2-.9 2-2-.9-2-2-2-2 .9-2 2z"/></svg>');
+  --photo-filter-icon-url: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><path fill="none" d="M0 0h48v48H0V0z"/><path d="M38.04 20v18H10V10h18V6H10.04c-2.2 0-4 1.8-4 4v28c0 2.2 1.8 4 4 4h28c2.2 0 4-1.8 4-4V20h-4zM34 20l1.88-4.12L40 14l-4.12-1.88L34 8l-1.88 4.12L28 14l4.12 1.88zm-7.5 1.5L24 16l-2.5 5.5L16 24l5.5 2.5L24 32l2.5-5.5L32 24z"/></svg>');
+  --visibility-icon-url: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><path d="M0 0h48v48H0z" fill="none"/><path d="M24 9C14 9 5.46 15.22 2 24c3.46 8.78 12 15 22 15 10.01 0 18.54-6.22 22-15-3.46-8.78-11.99-15-22-15zm0 25c-5.52 0-10-4.48-10-10s4.48-10 10-10 10 4.48 10 10-4.48 10-10 10zm0-16c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6z"/></svg>');
+  --check-circle-icon-url: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><path d="M0 0h48v48H0z" fill="none"/><path d="M24 4C12.95 4 4 12.95 4 24c0 11.04 8.95 20 20 20 11.04 0 20-8.96 20-20 0-11.05-8.96-20-20-20zm-4 30L10 24l2.83-2.83L20 28.34l15.17-15.17L38 16 20 34z"/></svg>');
+  --check-icon-url: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><path d="M0 0h48v48H0z" fill="none"/><path d="M18 32.34L9.66 24l-2.83 2.83L18 38l24-24-2.83-2.83z"/></svg>');
+  --search-icon-url: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><path d="M31 28h-1.59l-.55-.55C30.82 25.18 32 22.23 32 19c0-7.18-5.82-13-13-13S6 11.82 6 19s5.82 13 13 13c3.23 0 6.18-1.18 8.45-3.13l.55.55V31l10 9.98L40.98 38 31 28zm-12 0a9 9 0 1 1 .001-18.001A9 9 0 0 1 19 28z"/><path d="M0 0h48v48H0z" fill="none"/></svg>');
+  --remove-circle-icon-url: url('data:image/svg+xml;utf8,<svg height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M7 11v2h10v-2H7zm5-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>');
+  /* --chevron-icon-url: url('data:image/svg+xml;utf8,');   */
+
 }
 
 .lh-vars.lh-devtools {
@@ -550,8 +562,8 @@
 /* Audit Group */
 
 .lh-audit-group {
-  padding-top: var(--lh-audit-group-vpadding);
-  border-top: 1px solid var(--report-secondary-border-color);
+  padding: var(--lh-audit-group-vpadding) 0;
+  border-bottom: 1px solid var(--report-secondary-border-color);
   padding-left: var(--expandable-indent);
 }
 
@@ -559,6 +571,41 @@
   font-size: var(--subheader-font-size);
   line-height: var(--subheader-line-height);
   flex: 1;
+}
+
+.lh-audit-group--adorned .lh-audit-group__header::before {
+  content: '';
+  width: calc(var(--subheader-font-size) * 1.5);
+  height: calc(var(--subheader-font-size) * 1.5);
+  margin-right: calc(var(--subheader-font-size) / 2);
+  background: var(--medium-100-gray) none no-repeat center / 80%;
+  display: inline-block;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+/* A11y/Seo groups within Passed don't get an icon */
+.lh-audit-group:not(.lh-audit-group--adorned) .lh-audit-group__header::before {
+  content: none;
+}
+
+.lh-audit-group--manual .lh-audit-group__header::before {
+  background-image: var(--search-icon-url);
+}
+.lh-passed-audits .lh-audit-group__header::before {
+  background-image: var(--check-icon-url);
+}
+.lh-audit-group--diagnostics .lh-audit-group__header::before {
+  background-image: var(--search-icon-url);
+}
+.lh-audit-group--opportunities .lh-audit-group__header::before {
+  background-image: var(--photo-filter-icon-url);
+}
+.lh-audit-group--metrics .lh-audit-group__header::before {
+  background-image: var(--av-timer-icon-url);
+}
+.lh-audit-group--notapplicable .lh-audit-group__header::before {
+  background-image: var(--remove-circle-icon-url);
 }
 
 .lh-audit-group__summary {
