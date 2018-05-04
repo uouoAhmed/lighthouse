@@ -259,9 +259,6 @@ class DetailsRenderer {
         timing = Util.formatNumber(thumbnail.timing / 1000) + ' s';
       }
 
-      const timingEl = this._dom.createChildOf(frameEl, 'div', 'lh-filmstrip__timestamp');
-      timingEl.textContent = timing;
-
       const base64data = thumbnail.data;
       this._dom.createChildOf(frameEl, 'img', 'lh-filmstrip__thumbnail', {
         src: `data:image/jpeg;base64,${base64data}`,
