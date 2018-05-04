@@ -166,7 +166,7 @@ class CategoryRenderer {
     const failedElem = this.renderAuditGroup({
       title: `Failed audits`,
     }, {expandable: false, itemCount: this._getTotalAuditsLength(elements)});
-    failedElem.classList.add('lh-failed-audits');
+    failedElem.classList.add('lh-audit-group--adorned', 'lh-failed-audits');
     elements.forEach(elem => failedElem.appendChild(elem));
     return failedElem;
   }
@@ -179,7 +179,7 @@ class CategoryRenderer {
     const passedElem = this.renderAuditGroup({
       title: `Passed audits`,
     }, {expandable: true, itemCount: this._getTotalAuditsLength(elements)});
-    passedElem.classList.add('lh-passed-audits');
+    passedElem.classList.add('lh-audit-group--adorned', 'lh-passed-audits');
     elements.forEach(elem => passedElem.appendChild(elem));
     return passedElem;
   }
@@ -192,7 +192,7 @@ class CategoryRenderer {
     const notApplicableElem = this.renderAuditGroup({
       title: `Not applicable`,
     }, {expandable: true, itemCount: this._getTotalAuditsLength(elements)});
-    notApplicableElem.classList.add('lh-audit-group--notapplicable');
+    notApplicableElem.classList.add('lh-audit-group--adorned', 'lh-audit-group--notapplicable');
     elements.forEach(elem => notApplicableElem.appendChild(elem));
     return notApplicableElem;
   }
@@ -206,7 +206,7 @@ class CategoryRenderer {
     const group = {title: 'Additional items to manually check', description: manualDescription};
     const auditGroupElem = this.renderAuditGroup(group,
         {expandable: true, itemCount: manualAudits.length});
-    auditGroupElem.classList.add('lh-audit-group--manual');
+    auditGroupElem.classList.add('lh-audit-group--adorned', 'lh-audit-group--manual');
     manualAudits.forEach((audit, i) => {
       auditGroupElem.appendChild(this.renderAudit(audit, i));
     });
