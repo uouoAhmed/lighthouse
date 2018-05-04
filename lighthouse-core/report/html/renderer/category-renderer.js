@@ -329,12 +329,7 @@ class CategoryRenderer {
 
     if (failedElements.length) {
       // if failed audits are grouped skip the 'X Failed Audits' header
-      if (hasFailedGroups) {
-        failedElements.forEach(elem => element.appendChild(elem));
-      } else {
-        const failedElem = this._renderFailedAuditsSection(failedElements);
-        element.appendChild(failedElem);
-      }
+      failedElements.forEach(elem => element.appendChild(elem));
     }
 
     if (manualAudits.length) {
