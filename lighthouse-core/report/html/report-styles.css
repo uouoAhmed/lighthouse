@@ -18,7 +18,7 @@
   --caption-font-size: 12px;
   --caption-line-height: 16px;
   --default-padding: 12px;
-  --section-padding: 20px;
+  --section-padding: 16px;
   --section-indent: 16px;
   --audit-group-indent: 16px;
   --audit-indent: 16px;
@@ -58,7 +58,7 @@
   --lh-audit-vpadding: 8px;
   --lh-audit-index-width: 1.3em;
   --lh-audit-hgap: 12px;
-  --lh-audit-group-vpadding: 12px;
+  --lh-audit-group-vpadding: 16px;
   --lh-section-vpadding: 12px;
   --pass-icon-url: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><title>check</title><path fill="hsl(139, 70%, 30%)" d="M24 4C12.95 4 4 12.95 4 24c0 11.04 8.95 20 20 20 11.04 0 20-8.96 20-20 0-11.05-8.96-20-20-20zm-4 30L10 24l2.83-2.83L20 28.34l15.17-15.17L38 16 20 34z"/></svg>');
   --average-icon-url: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><title>info</title><path fill="hsl(31, 100%, 45%)" d="M24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm2 30h-4V22h4v12zm0-16h-4v-4h4v4z"/></svg>');
@@ -99,7 +99,7 @@
 
   --lh-audit-vpadding: 4px;
   --lh-audit-hgap: 12px;
-  --lh-audit-group-vpadding: 8px;
+  --lh-audit-group-vpadding: 12px;
   --lh-section-vpadding: 8px;
 }
 
@@ -279,12 +279,11 @@
 /* Expandable Details (Audit Groups, Audits) */
 
 .lh-expandable-details {
-  padding-left: var(--expandable-indent);
+
 }
 
 .lh-expandable-details__summary {
   cursor: pointer;
-  margin-left: calc(0px - var(--expandable-indent));
 }
 
 .lh-audit__header {
@@ -315,7 +314,7 @@
 }
 
 .lh-metric {
-  border-top: 1px solid var(--report-secondary-border-color);
+  border-bottom: 1px solid var(--report-secondary-border-color);
 }
 
 .lh-metric__innerwrap {
@@ -346,8 +345,9 @@
 .lh-metrics__disclaimer {
   color: var(--medium-75-gray);
 }
-.lh-metrics__disclaimer--foot {
-  text-align: right;
+.lh-metrics__disclaimer--head {
+  margin-bottom: var(--lh-section-vpadding);
+  padding-left: var(--text-indent);
 }
 
 .lh-metric__description {
@@ -445,8 +445,7 @@
 }
 
 .lh-load-opportunity__summary .lh-debug {
-  width: calc(100% - var(--expandable-indent));
-  margin: 0 var(--expandable-indent);
+
 }
 
 .lh-load-opportunity__title {
@@ -540,14 +539,10 @@
 /* Audit */
 
 .lh-audit {
-  margin-bottom: var(--lh-audit-vpadding);
-  padding-top: var(--lh-audit-vpadding);
-  border-top: 1px solid var(--report-secondary-border-color);
+  margin-top: var(--lh-audit-vpadding);
+  padding-bottom: var(--lh-audit-vpadding);
+  border-bottom: 1px solid var(--report-secondary-border-color);
   font-size: var(--body-font-size);
-}
-
-.lh-audit:last-of-type {
-  border-bottom: none;
 }
 
 .lh-audit .lh-debug {
@@ -564,12 +559,12 @@
 .lh-audit-group {
   padding: var(--lh-audit-group-vpadding) 0;
   border-bottom: 1px solid var(--report-secondary-border-color);
-  padding-left: var(--expandable-indent);
 }
 
 .lh-audit-group__header {
   font-size: var(--subheader-font-size);
   line-height: var(--subheader-line-height);
+  margin-bottom: var(--lh-audit-group-vpadding);
   flex: 1;
 }
 
@@ -608,11 +603,14 @@
   background-image: var(--remove-circle-icon-url);
 }
 
+/* Removing too much whitespace */
+.lh-audit-group--metrics {
+  margin-top: -28px;
+}
+
 .lh-audit-group__summary {
   display: flex;
   justify-content: space-between;
-  margin-bottom: var(--lh-audit-group-vpadding);
-  margin-left: calc(0px - var(--expandable-indent));
 }
 
 .lh-audit-group__itemcount {
@@ -627,7 +625,6 @@
 .lh-audit-group__description {
   font-size: var(--body-font-size);
   color: var(--secondary-text-color);
-  margin-top: calc(0px - var(--lh-audit-group-vpadding));
   margin-bottom: var(--lh-audit-group-vpadding);
   line-height: var(--body-line-height);
 }
@@ -757,6 +754,10 @@
 
   padding: var(--section-padding);
   border-top: 1px solid var(--report-border-color);
+}
+
+.lh-category:first-of-type {
+  padding-top: calc(2 * var(--section-padding));
 }
 
 /* section hash link jump should preserve fixed header
