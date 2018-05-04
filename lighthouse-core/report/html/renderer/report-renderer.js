@@ -235,7 +235,7 @@ ReportRenderer.AuditJSON; // eslint-disable-line no-unused-expressions
  *     name: string,
  *     id: string,
  *     score: number,
- *     description: string,
+ *     description: (string|undefined),
  *     manualDescription: string,
  *     audits: !Array<!ReportRenderer.AuditJSON>
  * }}
