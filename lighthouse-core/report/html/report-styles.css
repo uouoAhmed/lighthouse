@@ -301,6 +301,7 @@
   padding: 0;
   padding-bottom: 0;
   width: calc(var(--lh-filmstrip-thumbnail-width) * 10 + var(--default-padding) * 2);
+  margin: 0 auto;
 }
 
 .lh-narrow .lh-timeline-container {
@@ -351,6 +352,13 @@
 
 .lh-metric__name {
   flex: 1;
+}
+
+.lh-metrics__disclaimer {
+  color: var(--medium-75-gray);
+}
+.lh-metrics__disclaimer--foot {
+  text-align: right;
 }
 
 .lh-metric__description {
@@ -526,24 +534,6 @@
 .lh-filmstrip__frame {
   text-align: right;
   position: relative;
-}
-
-.lh-filmstrip__timestamp {
-  margin-bottom: calc(0.5 * var(--caption-line-height));
-  font-size: var(--caption-font-size);
-  line-height: var(--caption-line-height);
-  padding-top: 1px;
-  padding-right: 6px;
-}
-
-.lh-filmstrip__timestamp::before {
-  content: '';
-  height: 7px;
-  width: 2px;
-  background: var(--metric-timeline-rule-color);
-  position: absolute;
-  right: 0;
-  top: -2px;
 }
 
 .lh-filmstrip__thumbnail {

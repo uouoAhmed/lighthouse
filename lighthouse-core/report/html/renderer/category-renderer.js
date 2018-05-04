@@ -89,7 +89,7 @@ class CategoryRenderer {
    * @param {!ReportRenderer.CategoryJSON} category
    * @return {!Element}
    */
-  renderCategoryScore(category) {
+  renderCategoryHeader(category) {
     const tmpl = this.dom.cloneTemplate('#tmpl-lh-category-header', this.templateContext);
 
     const gaugeContainerEl = this.dom.find('.lh-score__gauge', tmpl);
@@ -98,8 +98,11 @@ class CategoryRenderer {
 
     this.dom.find('.lh-category-header__title', tmpl).appendChild(
       this.dom.convertMarkdownCodeSnippets(category.name));
-    this.dom.find('.lh-category-header__description', tmpl)
-      .appendChild(this.dom.convertMarkdownLinkSnippets(category.description));
+    if (category.description) {
+      const descEl = this.dom.convertMarkdownLinkSnippets(category.description);
+      this.dom.find('.lh-category-header__description', tmpl).appendChild(descEl);
+    }
+
 
     return /** @type {!Element} */ (tmpl.firstElementChild);
   }
@@ -248,7 +251,7 @@ class CategoryRenderer {
   render(category, groupDefinitions) {
     const element = this.dom.createElement('div', 'lh-category');
     this.createPermalinkSpan(element, category.id);
-    element.appendChild(this.renderCategoryScore(category));
+    element.appendChild(this.renderCategoryHeader(category));
 
     const manualAudits = category.audits.filter(item => item.result.scoreDisplayMode === 'manual');
     const nonManualAudits = category.audits.filter(audit => !manualAudits.includes(audit));

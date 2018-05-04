@@ -94,12 +94,17 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
   render(category, groups) {
     const element = this.dom.createElement('div', 'lh-category');
     this.createPermalinkSpan(element, category.id);
-    element.appendChild(this.renderCategoryScore(category));
-
-    const metricAudits = category.audits.filter(audit => audit.group === 'metrics');
-    const metricAuditsEl = this.renderAuditGroup(groups['metrics'], {expandable: false});
+    element.appendChild(this.renderCategoryHeader(category));
 
     // Metrics
+    const metricAudits = category.audits.filter(audit => audit.group === 'metrics');
+    const metricAuditsEl = this.renderAuditGroup(groups['metrics'], {expandable: false});
+    const disclaimer = this.dom.createChildOf(metricAuditsEl, 'div',
+        'lh-metrics__disclaimer lh-metrics__disclaimer--head');
+    disclaimer.textContent = 'Computed values may vary. ';
+    const link = this.dom.createChildOf(disclaimer, 'a', '', {href: 'https://github.com/GoogleChrome/lighthouse/blob/master/docs/scoring.md'});
+    link.textContent = 'Learn more';
+
     const keyMetrics = metricAudits.filter(a => a.weight >= 3);
     const otherMetrics = metricAudits.filter(a => a.weight < 3);
 
@@ -114,8 +119,18 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
       metricsColumn2El.appendChild(this._renderMetric(item));
     });
 
+    const estValuesEl = this.dom.createChildOf(metricsColumn2El, 'div',
+        'lh-metrics__disclaimer lh-metrics__disclaimer--foot');
+    estValuesEl.textContent = 'Values: Estimated';
+
+    metricAuditsEl.open = true;
+    element.appendChild(metricAuditsEl);
+
     // Filmstrip
-    const timelineEl = this.dom.createChildOf(metricAuditsEl, 'div', 'lh-timeline');
+    const filmStripHeader = this.dom.createChildOf(element, 'div', 'lh-audit-group__header');
+    filmStripHeader.textContent = 'Filmstrip';
+
+    const timelineEl = this.dom.createChildOf(element, 'div', 'lh-timeline');
     const thumbnailAudit = category.audits.find(audit => audit.id === 'screenshot-thumbnails');
     const thumbnailResult = thumbnailAudit && thumbnailAudit.result;
     if (thumbnailResult && thumbnailResult.details) {
@@ -125,9 +140,6 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
       const filmstripEl = this.detailsRenderer.render(thumbnailDetails);
       timelineEl.appendChild(filmstripEl);
     }
-
-    metricAuditsEl.open = true;
-    element.appendChild(metricAuditsEl);
 
     // Opportunities
     const opportunityAudits = category.audits
