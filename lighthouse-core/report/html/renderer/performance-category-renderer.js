@@ -48,11 +48,11 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
    */
   _renderOpportunity(audit, index, scale) {
     const tmpl = this.dom.cloneTemplate('#tmpl-lh-opportunity', this.templateContext);
-    const element = this.dom.find('.lh-load-opportunity', tmpl);
-    element.classList.add(`lh-load-opportunity--${Util.calculateRating(audit.result.score)}`);
+    const element = this.dom.find('.lh-audit--load-opportunity', tmpl);
+    element.classList.add(`lh-audit--${Util.calculateRating(audit.result.score)}`);
     element.id = audit.result.name;
 
-    const titleEl = this.dom.find('.lh-load-opportunity__title', tmpl);
+    const titleEl = this.dom.find('.lh-audit__title', tmpl);
     titleEl.textContent = audit.result.description;
     this.dom.find('.lh-audit__index', element).textContent = `${index + 1}`;
 
@@ -72,12 +72,13 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
     const displayValue = Util.formatDisplayValue(audit.result.displayValue);
     const sparklineWidthPct = `${summaryInfo.wastedMs / scale * 100}%`;
     const wastedMs = Util.formatSeconds(summaryInfo.wastedMs, 0.01);
+    const wastedEl = this.dom.find('.lh-load-opportunity__wasted-stat', tmpl);
     const auditDescription = this.dom.convertMarkdownLinkSnippets(audit.result.helpText);
     this.dom.find('.lh-load-opportunity__sparkline', tmpl).title = displayValue;
-    this.dom.find('.lh-load-opportunity__wasted-stat', tmpl).title = displayValue;
     this.dom.find('.lh-sparkline__bar', tmpl).style.width = sparklineWidthPct;
-    this.dom.find('.lh-load-opportunity__wasted-stat', tmpl).textContent = wastedMs;
-    this.dom.find('.lh-load-opportunity__description', tmpl).appendChild(auditDescription);
+    this.dom.find('.lh-audit__description', tmpl).appendChild(auditDescription);
+    wastedEl.title = displayValue;
+    wastedEl.textContent = wastedMs;
 
     // If there's no `type`, then we only used details for `summary`
     if (details.type) {

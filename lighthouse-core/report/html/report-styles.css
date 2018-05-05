@@ -305,7 +305,7 @@
   cursor: pointer;
 }
 
-.lh-audit__header.lh-load-opportunity__summary {
+.lh-audit--load-opportunity .lh-audit__header {
   display: block;
 }
 
@@ -429,10 +429,6 @@
 
 /* Perf load opportunity */
 
-.lh-load-opportunity:last-of-type {
-  border-bottom: none;
-}
-
 .lh-load-opportunity__cols {
   display: flex;
   align-items: flex-start;
@@ -445,7 +441,6 @@
   display: unset;
   line-height: calc(2.3 * var(--body-font-size));
 }
-
 
 .lh-load-opportunity__col {
   display: flex;
@@ -460,7 +455,6 @@
   flex: 4;
 }
 
-
 .lh-load-opportunity__wasted-stat {
   text-align: right;
   flex: 0 0 calc(3 * var(--body-font-size));
@@ -469,27 +463,27 @@
 }
 
 
-.lh-load-opportunity--pass .lh-load-opportunity__wasted-stat {
+.lh-audit--pass .lh-load-opportunity__wasted-stat {
   color: var(--pass-color);
 }
 
-.lh-load-opportunity--pass .lh-sparkline__bar {
+.lh-audit--pass .lh-sparkline__bar {
   background: var(--pass-color);
 }
 
-.lh-load-opportunity--average .lh-sparkline__bar {
+.lh-audit--average .lh-sparkline__bar {
   background: var(--average-color);
 }
 
-.lh-load-opportunity--average .lh-load-opportunity__wasted-stat {
+.lh-audit--average .lh-load-opportunity__wasted-stat {
   color: var(--average-color);
 }
 
-.lh-load-opportunity--fail .lh-sparkline__bar {
+.lh-audit--fail .lh-sparkline__bar {
   background: var(--fail-color);
 }
 
-.lh-load-opportunity--fail .lh-load-opportunity__wasted-stat {
+.lh-audit--fail .lh-load-opportunity__wasted-stat {
   color: var(--fail-color);
 }
 
