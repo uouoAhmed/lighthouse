@@ -89,6 +89,18 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
   }
 
   /**
+   * @param {!ReportRenderer.AuditJSON} audit
+   * @return {number|undefined}
+   */
+  _getWastedMs(audit) {
+    try {
+      return audit.result.details.summary.wastedMs;
+    } catch (e) {
+      return -1;
+    }
+  }
+
+  /**
    * @override
    */
   render(category, groups) {
@@ -136,12 +148,10 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
     // Opportunities
     const opportunityAudits = category.audits
         .filter(audit => audit.group === 'load-opportunities' && audit.result.score < 1)
-        .sort((auditA, auditB) =>
-            auditB.result.details.summary.wastedMs -
-            auditA.result.details.summary.wastedMs);
+        .sort((auditA, auditB) => this._getWastedMs(auditB) - this._getWastedMs(auditA));
 
     if (opportunityAudits.length) {
-      const wastedMsValues = opportunityAudits.map(audit => audit.result.details.summary.wastedMs);
+      const wastedMsValues = opportunityAudits.map(audit => this._getWastedMs(audit));
       const maxWaste = Math.max(...wastedMsValues);
       const scale = Math.ceil(maxWaste / 1000) * 1000;
       const groupEl = this.renderAuditGroup(groups['load-opportunities'], {expandable: false});
