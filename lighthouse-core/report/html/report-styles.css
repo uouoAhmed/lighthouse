@@ -363,10 +363,9 @@
 
 .lh-metrics__disclaimer {
   color: var(--medium-75-gray);
-}
-.lh-metrics__disclaimer--head {
-  margin-bottom: var(--lh-section-vpadding);
-  padding-left: var(--text-indent);
+  text-align: right;
+  margin: var(--lh-section-vpadding) 0;
+  padding: 0 var(--text-indent);
 }
 
 .lh-metric__description {
