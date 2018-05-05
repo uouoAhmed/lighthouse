@@ -11,6 +11,7 @@
   --body-line-height: 18px;
   --subheader-font-size: 14px;
   --subheader-line-height: 20px;
+  --subheader-color: hsl(206, 6%, 25%);
   --header-font-size: 16px;
   --header-line-height: 24px;
   --title-font-size: 24px;
@@ -256,6 +257,13 @@
 .lh-audit__header > span {
   margin: 0 var(--audit-item-gap);
 }
+.lh-audit__header > div:first-child, .lh-audit__header > span:first-child {
+  margin-left: 0;
+}
+.lh-audit__header > div:last-child, .lh-audit__header > span:last-child {
+  margin-right: 0;
+}
+
 
 .lh-audit__header .lh-audit__index {
   width: var(--lh-audit-index-width);
@@ -268,12 +276,12 @@
 .lh-toggle-arrow {
   background: var(--chevron-icon-url) no-repeat center center / 20px 20px;
   width: 12px;
+  height: 18px;
   flex: none;
   transition: transform 150ms ease-in-out;
   cursor: pointer;
   border: none;
   transform: rotateZ(90deg);
-  margin-right: calc(var(--expandable-indent) - 12px);
   margin-top: calc((var(--body-line-height) - 12px) / 2);
 }
 
@@ -414,7 +422,6 @@
 /* Perf load opportunity */
 
 .lh-load-opportunity {
-
   border-bottom: 1px solid var(--report-secondary-border-color);
 }
 
@@ -556,8 +563,13 @@
   font-size: var(--body-font-size);
 }
 
+.lh-audit:last-child  {
+  border-bottom: none;
+}
+
+
 .lh-audit .lh-debug {
-  margin-left: calc(var(--text-indent) + var(--lh-audit-index-width));
+  margin-left: calc(var(--text-indent) + var(--lh-audit-index-width) + 3 * var(--audit-item-gap));
   margin-right: var(--lh-score-icon-width);
 }
 
@@ -572,11 +584,17 @@
   border-bottom: 1px solid var(--report-secondary-border-color);
 }
 
+.lh-audit-group:last-child {
+  border-bottom: none;
+}
+
 .lh-audit-group__header {
   font-size: var(--subheader-font-size);
   line-height: var(--subheader-line-height);
+  color: var(--subheader-color);
   margin-bottom: var(--lh-audit-group-vpadding);
   flex: 1;
+  font-weight: bold;
 }
 
 .lh-audit-group--adorned .lh-audit-group__header::before {
@@ -631,7 +649,7 @@
 }
 
 .lh-audit-group__summary .lh-toggle-arrow {
-  margin-top: calc((var(--subheader-line-height) - 12px) / 2);
+
 }
 
 .lh-audit-group__description {
