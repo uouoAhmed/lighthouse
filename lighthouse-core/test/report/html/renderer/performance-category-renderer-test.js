@@ -92,7 +92,7 @@ describe('PerfCategoryRenderer', () => {
     const oppSparklineBarElement = oppElement.querySelector('.lh-sparkline__bar');
     const oppSparklineElement = oppElement.querySelector('.lh-load-opportunity__sparkline');
     const oppTitleElement = oppElement.querySelector('.lh-load-opportunity__title');
-    const oppWastedElement = oppElement.querySelector('.lh-load-opportunity__wasted-stat');
+    const oppWastedElement = oppElement.querySelector('.lh-audit__display-text');
     assert.ok(oppTitleElement.textContent, 'did not render title');
     assert.ok(oppSparklineBarElement.style.width, 'did not set sparkline width');
     assert.ok(oppWastedElement.textContent, 'did not render stats');

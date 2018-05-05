@@ -26,17 +26,19 @@ class CategoryRenderer {
   /**
    * @param {!ReportRenderer.AuditJSON} audit
    * @param {number} index
+   * @param {DocumentFragment=} providedTmpl
    * @return {!Element}
    */
-  renderAudit(audit, index) {
-    const tmpl = this.dom.cloneTemplate('#tmpl-lh-audit', this.templateContext);
+  renderAudit(audit, index, providedTmpl) {
+    const tmpl = providedTmpl || this.dom.cloneTemplate('#tmpl-lh-audit', this.templateContext);
     const auditEl = this.dom.find('.lh-audit', tmpl);
     auditEl.id = audit.result.name;
+    const displayTextEl = this.dom.find('.lh-audit__display-text, .lh-audit__display-text', auditEl);
     const scoreDisplayMode = audit.result.scoreDisplayMode;
 
     if (audit.result.displayValue) {
       const displayValue = Util.formatDisplayValue(audit.result.displayValue);
-      this.dom.find('.lh-audit__display-text', auditEl).textContent = displayValue;
+      displayTextEl.textContent = displayValue;
     }
 
     const titleEl = this.dom.find('.lh-audit__title', auditEl);
@@ -44,7 +46,6 @@ class CategoryRenderer {
     this.dom.find('.lh-audit__description', auditEl)
       .appendChild(this.dom.convertMarkdownLinkSnippets(audit.result.helpText));
 
-    // Append audit details to header section so the entire audit is within a <details>.
     const header = /** @type {!HTMLDetailsElement} */ (this.dom.find('details', auditEl));
     if (audit.result.details && audit.result.details.type) {
       header.appendChild(this.detailsRenderer.render(audit.result.details));
@@ -58,10 +59,9 @@ class CategoryRenderer {
 
     if (audit.result.error) {
       auditEl.classList.add(`lh-audit--error`);
-      const textEl = this.dom.find('.lh-audit__display-text', auditEl);
-      textEl.textContent = 'Error!';
-      textEl.classList.add('tooltip-boundary');
-      const tooltip = this.dom.createChildOf(textEl, 'div', 'lh-error-tooltip-content tooltip');
+      displayTextEl.textContent = 'Error!';
+      displayTextEl.classList.add('tooltip-boundary');
+      const tooltip = this.dom.createChildOf(displayTextEl, 'div', 'tooltip');
       tooltip.textContent = audit.result.debugString || 'Report error: no audit information';
     } else if (audit.result.debugString) {
       const debugStrEl = this.dom.createChildOf(titleEl, 'div', 'lh-debug');

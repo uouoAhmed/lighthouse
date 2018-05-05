@@ -35,9 +35,11 @@ class Util {
    * @return {string}
    */
   static formatDisplayValue(displayValue) {
-    if (typeof displayValue === 'undefined') return '';
     if (typeof displayValue === 'string') return displayValue;
+    if (!displayValue) return '';
 
+    // Don't mutate the value
+    displayValue = [...displayValue];
     const replacementRegex = /%([0-9]*(\.[0-9]+)?d|s)/;
     const template = /** @type {string} */ (displayValue.shift());
     if (typeof template !== 'string') {

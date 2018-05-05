@@ -262,7 +262,6 @@
 .lh-audit__display-text,
 .lh-audit__score-icon,
 .lh-load-opportunity__sparkline,
-.lh-load-opportunity__wasted-stat,
 .lh-toggle-arrow {
   margin: 0 var(--audit-item-gap);
 }
@@ -455,36 +454,9 @@
   flex: 4;
 }
 
-.lh-load-opportunity__wasted-stat {
+.lh-audit--load-opportunity .lh-audit__display-text {
   text-align: right;
   flex: 0 0 calc(3 * var(--body-font-size));
-  font-size: var(--body-font-size);
-  line-height: var(--body-line-height);
-}
-
-
-.lh-audit--pass .lh-load-opportunity__wasted-stat {
-  color: var(--pass-color);
-}
-
-.lh-audit--pass .lh-sparkline__bar {
-  background: var(--pass-color);
-}
-
-.lh-audit--average .lh-sparkline__bar {
-  background: var(--average-color);
-}
-
-.lh-audit--average .lh-load-opportunity__wasted-stat {
-  color: var(--average-color);
-}
-
-.lh-audit--fail .lh-sparkline__bar {
-  background: var(--fail-color);
-}
-
-.lh-audit--fail .lh-load-opportunity__wasted-stat {
-  color: var(--fail-color);
 }
 
 
@@ -504,6 +476,19 @@
   height: 100%;
   float: right;
 }
+
+.lh-audit--pass .lh-sparkline__bar {
+  background: var(--pass-color);
+}
+
+.lh-audit--average .lh-sparkline__bar {
+  background: var(--average-color);
+}
+
+.lh-audit--fail .lh-sparkline__bar {
+  background: var(--fail-color);
+}
+
 
 
 /* Filmstrip */
@@ -941,6 +926,12 @@ summary.lh-passed-audits-summary {
   position: absolute;
   display: none; /* Don't retain these layers when not needed */
   opacity: 0;
+
+  background: #ffffff;
+  min-width: 23em;
+  padding: 15px;
+  border-radius: 5px;
+  text-align: initial;
 }
 
 .tooltip-boundary:hover {
@@ -952,10 +943,6 @@ summary.lh-passed-audits-summary {
   animation: fadeInTooltip 250ms;
   animation-fill-mode: forwards;
   animation-delay: 850ms;
-  min-width: 23em;
-  background: #ffffff;
-  padding: 15px;
-  border-radius: 5px;
   bottom: 100%;
   z-index: 1;
   will-change: opacity;
