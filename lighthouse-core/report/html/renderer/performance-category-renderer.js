@@ -138,9 +138,9 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
     // Opportunities
     const opportunityAudits = category.audits
         .filter(audit => audit.group === 'load-opportunities' && audit.result.score < 1)
-        .sort((auditA, auditB) => auditB.result.rawValue - auditA.result.rawValue);
+        .sort((auditA, auditB) => auditB.result.details.summary.wastedMs - auditA.result.details.summary.wastedMs);
     if (opportunityAudits.length) {
-      const maxWaste = Math.max(...opportunityAudits.map(audit => audit.result.rawValue));
+      const maxWaste = Math.max(...opportunityAudits.map(audit => audit.result.details.summary.wastedMs));
       const scale = Math.ceil(maxWaste / 1000) * 1000;
       const groupEl = this.renderAuditGroup(groups['load-opportunities'], {expandable: false});
       const tmpl = this.dom.cloneTemplate('#tmpl-lh-opportunity-header', this.templateContext);
