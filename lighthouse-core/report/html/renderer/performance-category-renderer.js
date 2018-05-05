@@ -111,9 +111,6 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
     // Metrics
     const metricAudits = category.audits.filter(audit => audit.group === 'metrics');
     const metricAuditsEl = this.renderAuditGroup(groups['metrics'], {expandable: false});
-    const estValuesEl = this.dom.createChildOf(metricAuditsEl, 'div',
-    'lh-metrics__disclaimer lh-metrics__disclaimer--head');
-    estValuesEl.textContent = 'Values are estimated and may vary. ';
 
     const keyMetrics = metricAudits.filter(a => a.weight >= 3);
     const otherMetrics = metricAudits.filter(a => a.weight < 3);
@@ -128,6 +125,9 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
     otherMetrics.forEach(item => {
       metricsColumn2El.appendChild(this._renderMetric(item));
     });
+    const estValuesEl = this.dom.createChildOf(metricsColumn2El, 'div',
+        'lh-metrics__disclaimer lh-metrics__disclaimer');
+    estValuesEl.textContent = 'Values are estimated and may vary.';
 
     metricAuditsEl.open = true;
     metricAuditsEl.classList.add('lh-audit-group--adorned', 'lh-audit-group--metrics');
