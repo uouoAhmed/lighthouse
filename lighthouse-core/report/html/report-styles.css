@@ -244,10 +244,8 @@
   display: none;
 }
 
-
-
 .lh-audit__description, .lh-category-header__description  {
-  margin-top: 5px;
+  margin: calc(var(--default-padding) / 2) 0 var(--default-padding);
   font-size: var(--body-font-size);
   color: var(--secondary-text-color);
   line-height: var(--body-line-height);
@@ -562,12 +560,6 @@
   border-bottom: none;
 }
 
-
-.lh-debug {
-  margin-left: calc(var(--text-indent) + var(--lh-audit-index-width) + 3 * var(--audit-item-gap));
-  margin-right: var(--lh-score-icon-width);
-}
-
 .lh-audit--error .lh-audit__display-text {
   color: var(--fail-color);
 }
@@ -663,18 +655,6 @@ details[open] > summary > .lh-audit-group__header {
   line-height: var(--caption-line-height);
   color: var(--fail-color);
   margin-top: 3px;
-}
-
-.lh-debug::before {
-  display: none;
-  content: '';
-  background: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>warn</title><path d="M0 0h24v24H0z" fill="none"/><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" fill="hsl(40, 100%, 50%)"/></svg>') no-repeat 50% 50%;
-  background-size: contain;
-  width: 20px;
-  height: 20px;
-  position: relative;
-  margin-right: calc(var(--default-padding) / 2);
-  top: 5px;
 }
 
 
