@@ -39,8 +39,8 @@ class CategoryRenderer {
       this.dom.find('.lh-audit__display-text', auditEl).textContent = displayValue;
     }
 
-    this.dom.find('.lh-audit__title', auditEl).appendChild(
-      this.dom.convertMarkdownCodeSnippets(audit.result.description));
+    const titleEl = this.dom.find('.lh-audit__title', auditEl);
+    titleEl.appendChild(this.dom.convertMarkdownCodeSnippets(audit.result.description));
     this.dom.find('.lh-audit__description', auditEl)
       .appendChild(this.dom.convertMarkdownLinkSnippets(audit.result.helpText));
 
@@ -64,7 +64,7 @@ class CategoryRenderer {
       const tooltip = this.dom.createChildOf(textEl, 'div', 'lh-error-tooltip-content tooltip');
       tooltip.textContent = audit.result.debugString || 'Report error: no audit information';
     } else if (audit.result.debugString) {
-      const debugStrEl = auditEl.appendChild(this.dom.createElement('div', 'lh-debug'));
+      const debugStrEl = this.dom.createChildOf(titleEl, 'div', 'lh-debug');
       debugStrEl.textContent = audit.result.debugString;
     }
     return auditEl;

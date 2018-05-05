@@ -52,13 +52,12 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
     element.classList.add(`lh-load-opportunity--${Util.calculateRating(audit.result.score)}`);
     element.id = audit.result.name;
 
-    const summary = this.dom.find('.lh-load-opportunity__summary', tmpl);
     const titleEl = this.dom.find('.lh-load-opportunity__title', tmpl);
     titleEl.textContent = audit.result.description;
     this.dom.find('.lh-audit__index', element).textContent = `${index + 1}`;
 
     if (audit.result.debugString || audit.result.error) {
-      const debugStrEl = this.dom.createChildOf(summary, 'div', 'lh-debug');
+      const debugStrEl = this.dom.createChildOf(titleEl, 'div', 'lh-debug');
       debugStrEl.textContent = audit.result.debugString || 'Audit error';
     }
     if (audit.result.error) return element;
