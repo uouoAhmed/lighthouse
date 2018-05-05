@@ -463,10 +463,6 @@
   flex: 4;
 }
 
-.lh-load-opportunity__summary .lh-debug {
-
-}
-
 .lh-load-opportunity__title {
   font-size: var(--body-font-size);
   flex: 10;
@@ -567,7 +563,7 @@
 }
 
 
-.lh-audit .lh-debug {
+.lh-debug {
   margin-left: calc(var(--text-indent) + var(--lh-audit-index-width) + 3 * var(--audit-item-gap));
   margin-right: var(--lh-score-icon-width);
 }
@@ -591,9 +587,12 @@
   font-size: var(--subheader-font-size);
   line-height: var(--subheader-line-height);
   color: var(--subheader-color);
-  margin-bottom: var(--lh-audit-group-vpadding);
   flex: 1;
   font-weight: bold;
+}
+
+details[open] > summary > .lh-audit-group__header {
+  margin-bottom: var(--lh-audit-group-vpadding);
 }
 
 .lh-audit-group--adorned .lh-audit-group__header::before {
@@ -634,6 +633,7 @@
 /* Removing too much whitespace */
 .lh-audit-group--metrics {
   margin-top: -28px;
+  border-bottom: none;
 }
 
 .lh-audit-group__summary {
@@ -978,9 +978,9 @@ summary.lh-passed-audits-summary {
 
 .tooltip-boundary:hover .tooltip {
   display: block;
-  animation: fadeInTooltip 150ms;
+  animation: fadeInTooltip 250ms;
   animation-fill-mode: forwards;
-  animation-delay: 900ms;
+  animation-delay: 850ms;
   min-width: 23em;
   background: #ffffff;
   padding: 15px;
