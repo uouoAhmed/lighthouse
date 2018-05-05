@@ -81,7 +81,7 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
 
     // If there's no `type`, then we only used details for `summary`
     if (details.type) {
-      element.appendChild(this.detailsRenderer.render(details));
+      this.dom.find('details', tmpl).appendChild(this.detailsRenderer.render(details));
     }
 
     return element;

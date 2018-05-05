@@ -262,6 +262,7 @@
 .lh-audit__header > div,
 .lh-audit__header > span {
   margin: 0 var(--audit-item-gap);
+  outline: 1px solid red;
 }
 .lh-audit__header > div:first-child, .lh-audit__header > span:first-child {
   margin-left: 0;
@@ -316,7 +317,8 @@
 
 .lh-audit-group[open] > .lh-audit-group__summary > .lh-toggle-arrow,
 .lh-expandable-details[open] > .lh-expandable-details__summary > .lh-toggle-arrow,
-.lh-expandable-details[open] > .lh-expandable-details__summary > div > .lh-toggle-arrow {
+.lh-expandable-details[open] > .lh-expandable-details__summary > div > .lh-toggle-arrow,
+.lh-expandable-details[open] > .lh-expandable-details__summary > div > div > .lh-toggle-arrow {
   transform: rotateZ(-90deg);
 }
 
