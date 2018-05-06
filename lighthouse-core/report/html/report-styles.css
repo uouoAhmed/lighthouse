@@ -58,7 +58,7 @@
   --lh-score-icon-width: calc(var(--body-font-size) / 14 * 16);
   --lh-category-score-width: calc(5 * var(--body-font-size));
   --lh-audit-vpadding: 8px;
-  --lh-audit-index-width: 1.3em;
+  --lh-audit-index-width: 18px;
   --lh-audit-hgap: 12px;
   --lh-audit-group-vpadding: 8px;
   --lh-section-vpadding: 12px;
@@ -145,8 +145,8 @@
 .lh-audit__description,
 .lh-load-opportunity__description,
 .lh-details {
-  margin-left: 35px; /* replace these with non-magic numbers */
-  margin-right: 10px; /* this one is pretty much perfect tho */
+  margin-left: calc(var(--text-indent) + var(--lh-audit-index-width) + 2 * var(--audit-item-gap));
+  margin-right: calc(var(--text-indent) + 2px);
 }
 
 .lh-details {
@@ -249,11 +249,14 @@
   display: none;
 }
 
-.lh-audit__description, .lh-category-header__description  {
-  margin: calc(var(--default-padding) / 2) 0 var(--default-padding);
-  font-size: var(--body-font-size);
+.lh-category-header__description,
+.lh-audit__description   {
   color: var(--secondary-text-color);
-  line-height: var(--body-line-height);
+}
+
+.lh-category-header__description  {
+  font-size: var(--body-font-size);
+  margin: calc(var(--default-padding) / 2) 0 var(--default-padding);
 }
 
 .lh-audit__header > div,
