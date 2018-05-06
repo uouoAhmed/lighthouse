@@ -163,10 +163,8 @@ class CategoryRenderer {
    * @return {!Element}
    */
   _renderFailedAuditsSection(elements) {
-    const failedElem = this.renderAuditGroup({
-      title: `Failed audits`,
-    }, {expandable: false, itemCount: this._getTotalAuditsLength(elements)});
-    failedElem.classList.add('lh-audit-group--adorned', 'lh-failed-audits');
+    const failedElem = this.dom.createElement('div');
+    failedElem.classList.add('lh-failed-audits');
     elements.forEach(elem => failedElem.appendChild(elem));
     return failedElem;
   }
@@ -324,7 +322,8 @@ class CategoryRenderer {
     });
 
     if (failedElements.length) {
-      failedElements.forEach(elem => element.appendChild(elem));
+      const failedElem = this._renderFailedAuditsSection(failedElements);
+      element.appendChild(failedElem);
     }
 
     if (manualAudits.length) {
