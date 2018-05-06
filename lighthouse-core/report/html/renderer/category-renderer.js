@@ -33,7 +33,7 @@ class CategoryRenderer {
     const tmpl = providedTmpl || this.dom.cloneTemplate('#tmpl-lh-audit', this.templateContext);
     const auditEl = this.dom.find('.lh-audit', tmpl);
     auditEl.id = audit.result.name;
-    const displayTextEl = this.dom.find('.lh-audit__display-text, .lh-audit__display-text', auditEl);
+    const displayTextEl = this.dom.find('.lh-audit__display-text', auditEl);
     const scoreDisplayMode = audit.result.scoreDisplayMode;
 
     if (audit.result.displayValue) {
@@ -43,8 +43,10 @@ class CategoryRenderer {
 
     const titleEl = this.dom.find('.lh-audit__title', auditEl);
     titleEl.appendChild(this.dom.convertMarkdownCodeSnippets(audit.result.description));
-    this.dom.find('.lh-audit__description', auditEl)
-      .appendChild(this.dom.convertMarkdownLinkSnippets(audit.result.helpText));
+    if (audit.result.helpText) {
+      this.dom.find('.lh-audit__description', auditEl)
+        .appendChild(this.dom.convertMarkdownLinkSnippets(audit.result.helpText));
+    }
 
     const header = /** @type {!HTMLDetailsElement} */ (this.dom.find('details', auditEl));
     if (audit.result.details && audit.result.details.type) {
@@ -61,7 +63,7 @@ class CategoryRenderer {
       auditEl.classList.add(`lh-audit--error`);
       displayTextEl.textContent = 'Error!';
       displayTextEl.classList.add('tooltip-boundary');
-      const tooltip = this.dom.createChildOf(displayTextEl, 'div', 'tooltip');
+      const tooltip = this.dom.createChildOf(displayTextEl, 'div', 'tooltip lh-debug');
       tooltip.textContent = audit.result.debugString || 'Report error: no audit information';
     } else if (audit.result.debugString) {
       const debugStrEl = this.dom.createChildOf(titleEl, 'div', 'lh-debug');
