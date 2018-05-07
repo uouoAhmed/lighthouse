@@ -129,7 +129,7 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
     estValuesEl.textContent = 'Values are estimated and may vary.';
 
     metricAuditsEl.open = true;
-    metricAuditsEl.classList.add('lh-audit-group--adorned', 'lh-audit-group--metrics');
+    metricAuditsEl.classList.add('lh-audit-group--metrics');
     element.appendChild(metricAuditsEl);
 
     // Filmstrip
@@ -160,7 +160,7 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
       opportunityAudits.forEach((item, i) =>
           groupEl.appendChild(this._renderOpportunity(item, i, scale)));
       groupEl.open = true;
-      groupEl.classList.add('lh-audit-group--adorned', 'lh-audit-group--opportunities');
+      groupEl.classList.add('lh-audit-group--opportunities');
       element.appendChild(groupEl);
     }
 
@@ -177,7 +177,7 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
       const groupEl = this.renderAuditGroup(groups['diagnostics'], {expandable: false});
       diagnosticAudits.forEach((item, i) => groupEl.appendChild(this.renderAudit(item, i)));
       groupEl.open = true;
-      groupEl.classList.add('lh-audit-group--adorned', 'lh-audit-group--diagnostics');
+      groupEl.classList.add('lh-audit-group--diagnostics');
       element.appendChild(groupEl);
     }
 

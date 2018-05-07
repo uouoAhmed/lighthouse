@@ -592,11 +592,7 @@
   font-weight: bold;
 }
 
-.lh-audit-group--adorned .lh-audit-group__summary + .lh-audit-group__description {
-  margin-top: var(--lh-audit-group-vpadding);
-}
-
-.lh-audit-group--adorned .lh-audit-group__header::before {
+.lh-audit-group__header::before {
   content: '';
   width: calc(var(--subheader-font-size) / 14 * 24);
   height: calc(var(--subheader-font-size) / 14 * 24);
@@ -608,9 +604,10 @@
 }
 
 /* A11y/Seo groups within Passed don't get an icon */
-.lh-audit-group:not(.lh-audit-group--adorned) .lh-audit-group__header::before {
+.lh-audit-group--unadorned .lh-audit-group__header::before {
   content: none;
 }
+
 
 .lh-audit-group--manual .lh-audit-group__header::before {
   background-image: var(--search-icon-url);
@@ -655,7 +652,11 @@
 .lh-audit-group__description {
   font-size: var(--body-font-size);
   color: var(--medium-75-gray);
-  margin-bottom: var(--lh-audit-group-vpadding);
+  margin: var(--lh-audit-group-vpadding) 0;
+}
+
+.lh-audit-group--unadorned .lh-audit-group__description {
+  margin-top: 0;
 }
 
 
