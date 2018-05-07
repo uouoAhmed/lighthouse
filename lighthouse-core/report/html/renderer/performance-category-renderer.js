@@ -95,7 +95,7 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
     try {
       return audit.result.details.summary.wastedMs;
     } catch (e) {
-      return -1;
+      return Number.MIN_VALUE;
     }
   }
 
