@@ -113,6 +113,11 @@ class LighthouseReportViewer {
   _replaceReportHtml(json) {
     this._validateReportJson(json);
 
+    if (!json.lighthouseVersion.startsWith('3')) {
+      this._loadInLegacyViewerVersion(json);
+      return;
+    }
+
     const dom = new DOM(document);
     const renderer = new ReportRenderer(dom);
 
@@ -165,12 +170,7 @@ class LighthouseReportViewer {
         throw new Error('Could not parse JSON file.');
       }
       this._reportIsFromGist = false;
-
-      if (!json.lighthouseVersion.startsWith('3')) {
-        this._loadInLegacyViewerVersion(json);
-      } else {
-        this._replaceReportHtml(json);
-      }
+      this._replaceReportHtml(json);
     }).catch(err => logger.error(err.message));
   }
 
