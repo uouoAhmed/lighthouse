@@ -321,7 +321,7 @@ class ReportUIFeatures {
       }
       case 'open-viewer': {
         const viewerPath = '/lighthouse/viewer/';
-        this.sendJsonReport(this.json, viewerPath);
+        ReportUIFeatures.openTabAndSendJsonReport(this.json, viewerPath);
         break;
       }
       case 'save-gist': {
@@ -351,27 +351,33 @@ class ReportUIFeatures {
    * @param {string} viewerPath
    * @protected
    */
-  sendJsonReport(reportJson, viewerPath, onMessageCallback = function() { }) {
+  static openTabAndSendJsonReport(reportJson, viewerPath) {
+    let resolve;
+    const p = new Promise(res => resolve = res);
     // Chrome doesn't allow us to immediately postMessage to a popup right
     // after it's created. Normally, we could also listen for the popup window's
     // load event, however it is cross-domain and won't fire. Instead, listen
     // for a message from the target app saying "I'm open".
     const json = reportJson;
     window.addEventListener('message', function msgHandler(/** @type {!Event} */ e) {
-      const messageEvent = /** @type {!MessageEvent<{opened: boolean}>} */ (e);
+      const messageEvent = /** @type {!MessageEvent<{opened: boolean, rendered: boolean}>} */ (e);
       if (messageEvent.origin !== VIEWER_ORIGIN) {
         return;
       }
       if (messageEvent.data.opened) {
         popup.postMessage({lhresults: json}, VIEWER_ORIGIN);
       }
-      onMessageCallback(messageEvent.data);
+      if (messageEvent.data.rendered) {
+        resolve(popup);
+      }
     });
 
     // The popup's window.name is keyed by version+url+fetchTime, so we reuse/select tabs correctly
-    const fetchTime = json.fetchTime || json.generatedTime;
+    const fetchTime = /** @type {!string} */ (json.fetchTime || json.generatedTime);
     const windowName = `${json.lighthouseVersion}-${json.initialUrl}-${fetchTime}`;
     const popup = /** @type {!Window} */ (window.open(`${VIEWER_ORIGIN}${viewerPath}`, windowName));
+
+    return p;
   }
 
   /**

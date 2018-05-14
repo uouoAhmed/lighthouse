@@ -179,18 +179,15 @@ class LighthouseReportViewer {
    * @param {!ReportRenderer.ReportJSON} reportJson
    * @private
    */
-  _loadInLegacyViewerVersion(json) {
+  async _loadInLegacyViewerVersion(json) {
     const warnMsg = `Version mismatch between viewer and JSON.
     Opening new tab with compatible viewer.`;
-    const features = new ViewerUIFeatures(new DOM(document));
     const viewerPath = '/lighthouse/viewer2x/';
 
     logger.log(warnMsg, false);
-    features.sendJsonReport(json, viewerPath, onMessage);
-    function onMessage(data) {
-      if (data.rendered) window.close();
-      logger.log(`${warnMsg} You can close this tab.`, false);
-    }
+    await ViewerUIFeatures.openTabAndSendJsonReport(json, viewerPath);
+    window.close();
+    logger.log(`${warnMsg} You can close this tab.`, false);
   }
 
   /**
