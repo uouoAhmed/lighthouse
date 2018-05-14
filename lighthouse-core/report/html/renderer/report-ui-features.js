@@ -368,7 +368,10 @@ class ReportUIFeatures {
       onMessageCallback(messageEvent.data);
     });
 
-    const popup = /** @type {!Window} */ (window.open(`${VIEWER_ORIGIN}${viewerPath}`, 'zblank'));
+    // The popup's window.name is keyed by version+url+fetchTime, so we reuse/select tabs correctly
+    const fetchTime = json.fetchTime || json.generatedTime;
+    const windowName = `${json.lighthouseVersion}-${json.initialUrl}-${fetchTime}`;
+    const popup = /** @type {!Window} */ (window.open(`${VIEWER_ORIGIN}${viewerPath}`, windowName));
   }
 
   /**
