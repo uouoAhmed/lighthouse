@@ -5,13 +5,13 @@
  */
 'use strict';
 
-/* global ReportUIFeatures, ReportGenerator */
+/* global ReportUIFeatures2X, ReportGenerator */
 
 /**
  * Extends ReportUIFeatures to add an (optional) ability to save to a gist and
  * generates the saved report from a browserified ReportGenerator.
  */
-class ViewerUIFeatures extends ReportUIFeatures {
+class ViewerUIFeatures extends ReportUIFeatures2X {
   /**
    * @param {!DOM} dom
    * @param {?function(!ReportRenderer.ReportJSON)} saveGistCallback

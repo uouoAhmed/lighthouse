@@ -5,7 +5,7 @@
  */
 'use strict';
 
-/* global LighthouseReportViewer, Logger */
+/* global LighthouseReportViewer, Logger2X */
 
 function loadScript(src) {
   return new Promise((resolve, reject) => {
@@ -28,7 +28,7 @@ if (!('URLSearchParams' in window)) {
 // Lazy load polyfills that are needed. If any of the load promises fails,
 // stop and don't create a report.
 Promise.all(loadPolyfillPromises).then(_ => {
-  window.logger = new Logger(document.querySelector('#lh-log'));
+  window.logger = new Logger2X(document.querySelector('#lh-log'));
 
   // Listen for log events from main report.
   document.addEventListener('lh-log', e => {

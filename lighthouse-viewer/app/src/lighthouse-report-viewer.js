@@ -5,7 +5,7 @@
  */
 'use strict';
 
-/* global DOM, ViewerUIFeatures, ReportRenderer, DragAndDrop, GithubApi, logger */
+/* global DOM2X, ViewerUIFeatures, ReportRenderer2X, DragAndDrop, GithubApi, logger */
 
 /**
  * Class that manages viewing Lighthouse reports.
@@ -113,8 +113,8 @@ class LighthouseReportViewer {
   _replaceReportHtml(json) {
     this._validateReportJson(json);
 
-    const dom = new DOM(document);
-    const renderer = new ReportRenderer(dom);
+    const dom = new DOM2X(document);
+    const renderer = new ReportRenderer2X(dom);
 
     const container = document.querySelector('main');
     try {
