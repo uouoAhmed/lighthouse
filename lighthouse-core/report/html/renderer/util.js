@@ -7,6 +7,7 @@
 
 /* globals self URL */
 
+(function(){
 const ELLIPSIS = '\u2026';
 const NBSP = '\xa0';
 const PASS_THRESHOLD = 0.75;
@@ -381,3 +382,5 @@ if (typeof module !== 'undefined' && module.exports) {
   // @ts-ignore
   self.Util = Util;
 }
+
+})();

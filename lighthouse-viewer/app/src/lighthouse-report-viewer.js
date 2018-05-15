@@ -5,7 +5,7 @@
  */
 'use strict';
 
-/* global DOM, ViewerUIFeatures, ReportRenderer, DragAndDrop, GithubApi, logger */
+/* global DOM, DOM2X, ViewerUIFeatures, ReportRenderer, ReportRenderer2X, DragAndDrop, GithubApi, logger */
 
 /**
  * Class that manages viewing Lighthouse reports.
@@ -120,7 +120,10 @@ class LighthouseReportViewer {
 
     const dom = new DOM(document);
     const renderer = new ReportRenderer(dom);
+    this._renderAndSetupViewer(dom, renderer, json);
+  }
 
+  _renderAndSetupViewer(dom, renderer, json) {
     const container = document.querySelector('main');
     try {
       renderer.renderReport(json, container);
@@ -180,15 +183,16 @@ class LighthouseReportViewer {
    * @private
    */
   _loadInLegacyViewerVersion(json) {
-    const warnMsg = `Version mismatch between viewer and JSON.
-    Opening new tab with compatible viewer.`;
-    const viewerPath = '/lighthouse/viewer2x/';
+    const elem = document.createElement('script');
+    elem.src = './2x/viewer-reportgenerator2x.js';
 
-    logger.log(warnMsg, false);
-    ViewerUIFeatures.openTabAndSendJsonReport(json, viewerPath).then(_ => {
-      window.close();
-      logger.log(`${warnMsg} You can close this tab.`, false);
-    });
+    elem.onload = _ => {
+      const dom = new DOM2X(document);
+      const renderer = new ReportRenderer2X(dom);
+      this._renderAndSetupViewer(dom, renderer, json);
+    };
+
+    document.body.appendChild(elem);
   }
 
   /**
