@@ -364,10 +364,12 @@ class ReportUIFeatures {
       if (messageEvent.origin !== VIEWER_ORIGIN) {
         return;
       }
+      // Most recent deployment
       if (messageEvent.data.opened) {
         popup.postMessage({lhresults: json}, VIEWER_ORIGIN);
       }
       if (messageEvent.data.rendered) {
+        window.removeEventListener('message', msgHandler);
         resolve(popup);
       }
     });
