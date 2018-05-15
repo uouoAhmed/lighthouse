@@ -12,21 +12,21 @@
  * Dummy text for ensuring report robustness: </script> pre$`post %%LIGHTHOUSE_JSON%%
  */
 
-/* globals self, Util, DetailsRenderer, CategoryRenderer, PerformanceCategoryRenderer */
+/* globals self, Util2X, DetailsRenderer2X, CategoryRenderer2X, PerformanceCategoryRenderer2X */
 
-class ReportRenderer {
+class ReportRenderer2X {
   /**
-   * @param {!DOM} dom
+   * @param {!DOM2X} dom
    */
   constructor(dom) {
-    /** @private {!DOM} */
+    /** @private {!DOM2X} */
     this._dom = dom;
     /** @private {!Document|!Element} */
     this._templateContext = this._dom.document();
   }
 
   /**
-   * @param {!ReportRenderer.ReportJSON} report
+   * @param {!ReportRenderer2X.ReportJSON} report
    * @param {!Element} container Parent element to render the report into.
    */
   renderReport(report, container) {
@@ -38,7 +38,7 @@ class ReportRenderer {
 
   /**
    * Define a custom element for <templates> to be extracted from. For example:
-   *     this.setTemplateContext(new DOMParser().parseFromString(htmlStr, 'text/html'))
+   *     this.setTemplateContext(new DOM2XParser().parseFromString(htmlStr, 'text/html'))
    * @param {!Document|!Element} context
    */
   setTemplateContext(context) {
@@ -46,13 +46,13 @@ class ReportRenderer {
   }
 
   /**
-   * @param {!ReportRenderer.ReportJSON} report
+   * @param {!ReportRenderer2X.ReportJSON} report
    * @return {!DocumentFragment}
    */
   _renderReportHeader(report) {
     const header = this._dom.cloneTemplate('#tmpl-lh-heading', this._templateContext);
     this._dom.find('.lh-config__timestamp', header).textContent =
-        Util.formatDateTime(report.generatedTime);
+        Util2X.formatDateTime(report.generatedTime);
     const url = this._dom.find('.lh-metadata__url', header);
     url.href = report.url;
     url.textContent = report.url;
@@ -73,19 +73,19 @@ class ReportRenderer {
   }
 
   /**
-   * @param {!ReportRenderer.ReportJSON} report
+   * @param {!ReportRenderer2X.ReportJSON} report
    * @return {!DocumentFragment}
    */
   _renderReportFooter(report) {
     const footer = this._dom.cloneTemplate('#tmpl-lh-footer', this._templateContext);
     this._dom.find('.lh-footer__version', footer).textContent = report.lighthouseVersion;
     this._dom.find('.lh-footer__timestamp', footer).textContent =
-        Util.formatDateTime(report.generatedTime);
+        Util2X.formatDateTime(report.generatedTime);
     return footer;
   }
 
   /**
-   * @param {!ReportRenderer.ReportJSON} report
+   * @param {!ReportRenderer2X.ReportJSON} report
    * @return {!DocumentFragment}
    */
   _renderReportNav(report) {
@@ -103,7 +103,7 @@ class ReportRenderer {
 
       this._dom.find('.leftnav-item__category', navItem).textContent = category.name;
       const score = this._dom.find('.leftnav-item__score', navItem);
-      score.classList.add(`lh-score__value--${Util.calculateRating(category.score)}`);
+      score.classList.add(`lh-score__value--${Util2X.calculateRating(category.score)}`);
       score.textContent = Math.round(category.score);
       nav.appendChild(navItem);
     }
@@ -112,7 +112,7 @@ class ReportRenderer {
 
   /**
    * Returns a div with a list of top-level warnings, or an empty div if no warnings.
-   * @param {!ReportRenderer.ReportJSON} report
+   * @param {!ReportRenderer2X.ReportJSON} report
    * @return {!Node}
    */
   _renderReportWarnings(report) {
@@ -131,7 +131,7 @@ class ReportRenderer {
   }
 
   /**
-   * @param {!ReportRenderer.ReportJSON} report
+   * @param {!ReportRenderer2X.ReportJSON} report
    * @return {!Element}
    */
   _renderReport(report) {
@@ -148,11 +148,11 @@ class ReportRenderer {
       scoreHeader = reportSection.appendChild(this._dom.createElement('div', 'lh-scores-header'));
     }
 
-    const detailsRenderer = new DetailsRenderer(this._dom);
-    const categoryRenderer = new CategoryRenderer(this._dom, detailsRenderer);
+    const detailsRenderer = new DetailsRenderer2X(this._dom);
+    const categoryRenderer = new CategoryRenderer2X(this._dom, detailsRenderer);
     categoryRenderer.setTemplateContext(this._templateContext);
-    const perfCategoryRenderer = new PerformanceCategoryRenderer(this._dom, detailsRenderer);
-    perfCategoryRenderer.setTemplateContext(this._templateContext);
+    const perfCategoryRenderer2X = new PerformanceCategoryRenderer2X(this._dom, detailsRenderer);
+    perfCategoryRenderer2X.setTemplateContext(this._templateContext);
 
     const categories = reportSection.appendChild(this._dom.createElement('div', 'lh-categories'));
     for (const category of report.reportCategories) {
@@ -163,7 +163,7 @@ class ReportRenderer {
       let renderer = categoryRenderer;
 
       if (category.id === 'performance') {
-        renderer = perfCategoryRenderer;
+        renderer = perfCategoryRenderer2X;
       }
 
       categories.appendChild(renderer.render(category, report.reportGroups));
@@ -176,9 +176,9 @@ class ReportRenderer {
 }
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = ReportRenderer;
+  module.exports = ReportRenderer2X;
 } else {
-  self.ReportRenderer = ReportRenderer;
+  self.ReportRenderer2X = ReportRenderer2X;
 }
 
 /**
@@ -199,11 +199,11 @@ if (typeof module !== 'undefined' && module.exports) {
  *       score: (number|boolean),
  *       scoringMode: string,
  *       extendedInfo: Object,
- *       details: (!DetailsRenderer.DetailsJSON|undefined)
+ *       details: (!DetailsRenderer2X.DetailsJSON|undefined)
  *     }
  * }}
  */
-ReportRenderer.AuditJSON; // eslint-disable-line no-unused-expressions
+ReportRenderer2X.AuditJSON; // eslint-disable-line no-unused-expressions
 
 /**
  * @typedef {{
@@ -212,10 +212,10 @@ ReportRenderer.AuditJSON; // eslint-disable-line no-unused-expressions
  *     weight: number,
  *     score: number,
  *     description: string,
- *     audits: !Array<!ReportRenderer.AuditJSON>
+ *     audits: !Array<!ReportRenderer2X.AuditJSON>
  * }}
  */
-ReportRenderer.CategoryJSON; // eslint-disable-line no-unused-expressions
+ReportRenderer2X.CategoryJSON; // eslint-disable-line no-unused-expressions
 
 /**
  * @typedef {{
@@ -223,7 +223,7 @@ ReportRenderer.CategoryJSON; // eslint-disable-line no-unused-expressions
  *     description: (string|undefined),
  * }}
  */
-ReportRenderer.GroupJSON; // eslint-disable-line no-unused-expressions
+ReportRenderer2X.GroupJSON; // eslint-disable-line no-unused-expressions
 
 /**
  * @typedef {{
@@ -235,8 +235,8 @@ ReportRenderer.GroupJSON; // eslint-disable-line no-unused-expressions
  *     url: string,
  *     runWarnings: (!Array<string>|undefined),
  *     artifacts: {traces: {defaultPass: {traceEvents: !Array}}},
- *     reportCategories: !Array<!ReportRenderer.CategoryJSON>,
- *     reportGroups: !Object<string, !ReportRenderer.GroupJSON>,
+ *     reportCategories: !Array<!ReportRenderer2X.CategoryJSON>,
+ *     reportGroups: !Object<string, !ReportRenderer2X.GroupJSON>,
  *     runtimeConfig: {
  *       blockedUrlPatterns: !Array<string>,
  *       extraHeaders: !Object,
@@ -244,4 +244,4 @@ ReportRenderer.GroupJSON; // eslint-disable-line no-unused-expressions
  *     }
  * }}
  */
-ReportRenderer.ReportJSON; // eslint-disable-line no-unused-expressions
+ReportRenderer2X.ReportJSON; // eslint-disable-line no-unused-expressions

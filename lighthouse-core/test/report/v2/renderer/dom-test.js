@@ -9,19 +9,19 @@ const assert = require('assert');
 const fs = require('fs');
 const jsdom = require('jsdom');
 const URL = require('../../../../lib/url-shim');
-const DOM = require('../../../../report/v2/renderer/dom.js');
+const DOM2X = require('../../../../report/v2/renderer/dom.js');
 
 const TEMPLATE_FILE = fs.readFileSync(__dirname + '/../../../../report/v2/templates.html', 'utf8');
 
 /* eslint-env mocha */
 
-describe('DOM', () => {
+describe('DOM2X', () => {
   let dom;
 
   before(() => {
     global.URL = URL;
     const document = jsdom.jsdom(TEMPLATE_FILE);
-    dom = new DOM(document);
+    dom = new DOM2X(document);
   });
 
   after(() => {

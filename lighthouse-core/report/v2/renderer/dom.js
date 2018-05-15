@@ -7,7 +7,7 @@
 
 /* globals URL self */
 
-class DOM {
+class DOM2X {
   /**
    * @param {!Document} document
    */
@@ -68,7 +68,7 @@ class DOM {
     const clone = /** @type {!DocumentFragment} */ (this._document.importNode(
         template.content, true));
 
-    // Prevent duplicate styles in the DOM. After a template has been stamped
+    // Prevent duplicate styles in the DOM2X. After a template has been stamped
     // for the first time, remove the clone's styles so they're not re-added.
     if (template.hasAttribute('data-stamped')) {
       this.findAll('style', clone).forEach(style => style.remove());
@@ -172,7 +172,7 @@ class DOM {
 }
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = DOM;
+  module.exports = DOM2X;
 } else {
-  self.DOM = DOM;
+  self.DOM2X = DOM2X;
 }

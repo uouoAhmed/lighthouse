@@ -16,7 +16,7 @@ const RATINGS = {
   FAIL: {label: 'fail'},
 };
 
-class Util {
+class Util2X {
   /**
    * Convert a score to a rating label.
    * @param {number} score
@@ -190,7 +190,7 @@ class Util {
    */
   static parseURL(url) {
     const parsedUrl = new URL(url);
-    return {file: Util.getURLDisplayName(parsedUrl), hostname: parsedUrl.hostname};
+    return {file: Util2X.getURLDisplayName(parsedUrl), hostname: parsedUrl.hostname};
   }
 
   /**
@@ -199,13 +199,13 @@ class Util {
    * @return {string}
    */
   static chainDuration(startTime, endTime) {
-    return Util.formatNumber((endTime - startTime) * 1000);
+    return Util2X.formatNumber((endTime - startTime) * 1000);
   }
 }
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = Util;
+  module.exports = Util2X;
 } else {
   // @ts-ignore
-  self.Util = Util;
+  self.Util2X = Util2X;
 }

@@ -8,7 +8,7 @@
 /**
  * Logs messages via a UI butter.
  */
-class Logger {
+class Logger2X {
   /**
    * @param {!Element} element
    */
@@ -61,5 +61,5 @@ class Logger {
 }
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = Logger;
+  module.exports = Logger2X;
 }

@@ -12,14 +12,14 @@
 
 /* globals self URL Blob CustomEvent getFilenamePrefix window */
 
-class ReportUIFeatures {
+class ReportUIFeatures2X {
   /**
-   * @param {!DOM} dom
+   * @param {!DOM2X} dom
    */
   constructor(dom) {
-    /** @type {!ReportRenderer.ReportJSON} */
+    /** @type {!ReportRenderer2X.ReportJSON} */
     this.json; // eslint-disable-line no-unused-expressions
-    /** @protected {!DOM} */
+    /** @protected {!DOM2X} */
     this._dom = dom;
     /** @protected {!Document} */
     this._document = this._dom.document();
@@ -39,7 +39,7 @@ class ReportUIFeatures {
   /**
    * Adds export button, print, and other functionality to the report. The method
    * should be called whenever the report needs to be re-rendered.
-   * @param {!ReportRenderer.ReportJSON} report
+   * @param {!ReportRenderer2X.ReportJSON} report
    */
   initFeatures(report) {
     this.json = report;
@@ -52,9 +52,9 @@ class ReportUIFeatures {
   }
 
   /**
-   * Fires a custom DOM event on target.
+   * Fires a custom DOM2X event on target.
    * @param {string} name Name of the event.
-   * @param {!Node=} target DOM node to fire the event on.
+   * @param {!Node=} target DOM2X node to fire the event on.
    * @param {*=} detail Custom data to include.
    */
   _fireEventOn(name, target = this._document, detail) {
@@ -341,7 +341,7 @@ class ReportUIFeatures {
     const a = /** @type {!HTMLAnchorElement} */ (this._dom.createElement('a'));
     a.download = `${filename}${ext}`;
     a.href = href;
-    this._document.body.appendChild(a); // Firefox requires anchor to be in the DOM.
+    this._document.body.appendChild(a); // Firefox requires anchor to be in the DOM2X.
     a.click();
 
     // cleanup.
@@ -351,7 +351,7 @@ class ReportUIFeatures {
 }
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = ReportUIFeatures;
+  module.exports = ReportUIFeatures2X;
 } else {
-  self.ReportUIFeatures = ReportUIFeatures;
+  self.ReportUIFeatures2X = ReportUIFeatures2X;
 }

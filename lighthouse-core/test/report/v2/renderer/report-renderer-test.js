@@ -10,37 +10,37 @@
 const assert = require('assert');
 const fs = require('fs');
 const jsdom = require('jsdom');
-const Util = require('../../../../report/v2/renderer/util.js');
+const Util2X = require('../../../../report/v2/renderer/util.js');
 const URL = require('../../../../lib/url-shim');
-const DOM = require('../../../../report/v2/renderer/dom.js');
-const DetailsRenderer = require('../../../../report/v2/renderer/details-renderer.js');
-const ReportUIFeatures = require('../../../../report/v2/renderer/report-ui-features.js');
-const CategoryRenderer = require('../../../../report/v2/renderer/category-renderer.js');
-// lazy loaded because it depends on CategoryRenderer to be available globally
-let PerformanceCategoryRenderer = null;
-const CriticalRequestChainRenderer = require(
+const DOM2X = require('../../../../report/v2/renderer/dom.js');
+const DetailsRenderer2X = require('../../../../report/v2/renderer/details-renderer.js');
+const ReportUIFeatures2X = require('../../../../report/v2/renderer/report-ui-features.js');
+const CategoryRenderer2X = require('../../../../report/v2/renderer/category-renderer.js');
+// lazy loaded because it depends on CategoryRenderer2X to be available globally
+let PerformanceCategoryRenderer2X = null;
+const CriticalRequestChainRenderer2X = require(
     '../../../../report/v2/renderer/crc-details-renderer.js');
-const ReportRenderer = require('../../../../report/v2/renderer/report-renderer.js');
+const ReportRenderer2X = require('../../../../report/v2/renderer/report-renderer.js');
 const sampleResults = require('../../../results/sample_v2.json');
 
 const TIMESTAMP_REGEX = /\d+, \d{4}.*\d+:\d+/;
 const TEMPLATE_FILE = fs.readFileSync(__dirname + '/../../../../report/v2/templates.html', 'utf8');
 
-describe('ReportRenderer V2', () => {
+describe('ReportRenderer2X V2', () => {
   let renderer;
 
   before(() => {
     global.URL = URL;
-    global.Util = Util;
-    global.ReportUIFeatures = ReportUIFeatures;
-    global.CriticalRequestChainRenderer = CriticalRequestChainRenderer;
-    global.DetailsRenderer = DetailsRenderer;
-    global.CategoryRenderer = CategoryRenderer;
-    if (!PerformanceCategoryRenderer) {
-      PerformanceCategoryRenderer =
+    global.Util2X = Util2X;
+    global.ReportUIFeatures2X = ReportUIFeatures2X;
+    global.CriticalRequestChainRenderer2X = CriticalRequestChainRenderer2X;
+    global.DetailsRenderer2X = DetailsRenderer2X;
+    global.CategoryRenderer2X = CategoryRenderer2X;
+    if (!PerformanceCategoryRenderer2X) {
+      PerformanceCategoryRenderer2X =
         require('../../../../report/v2/renderer/performance-category-renderer.js');
     }
-    global.PerformanceCategoryRenderer = PerformanceCategoryRenderer;
+    global.PerformanceCategoryRenderer2X = PerformanceCategoryRenderer2X;
 
     // Stub out matchMedia for Node.
     global.matchMedia = function() {
@@ -52,22 +52,22 @@ describe('ReportRenderer V2', () => {
     const document = jsdom.jsdom(TEMPLATE_FILE);
     global.self = document.defaultView;
 
-    const dom = new DOM(document);
-    const detailsRenderer = new DetailsRenderer(dom);
-    const categoryRenderer = new CategoryRenderer(dom, detailsRenderer);
-    renderer = new ReportRenderer(dom, categoryRenderer);
+    const dom = new DOM2X(document);
+    const detailsRenderer = new DetailsRenderer2X(dom);
+    const categoryRenderer = new CategoryRenderer2X(dom, detailsRenderer);
+    renderer = new ReportRenderer2X(dom, categoryRenderer);
   });
 
   after(() => {
     global.self = undefined;
     global.URL = undefined;
-    global.Util = undefined;
-    global.ReportUIFeatures = undefined;
+    global.Util2X = undefined;
+    global.ReportUIFeatures2X = undefined;
     global.matchMedia = undefined;
-    global.CriticalRequestChainRenderer = undefined;
-    global.DetailsRenderer = undefined;
-    global.CategoryRenderer = undefined;
-    global.PerformanceCategoryRenderer = undefined;
+    global.CriticalRequestChainRenderer2X = undefined;
+    global.DetailsRenderer2X = undefined;
+    global.CategoryRenderer2X = undefined;
+    global.PerformanceCategoryRenderer2X = undefined;
   });
 
   describe('renderReport', () => {
@@ -123,7 +123,7 @@ describe('ReportRenderer V2', () => {
       const scores = header.querySelectorAll('.leftnav-item__score');
       sampleResults.reportCategories.forEach((cat, i) => {
         assert.equal(categories[i].textContent, cat.name);
-        assert.equal(scores[i].textContent, Math.round(Util.formatNumber(cat.score)));
+        assert.equal(scores[i].textContent, Math.round(Util2X.formatNumber(cat.score)));
       });
     });
 

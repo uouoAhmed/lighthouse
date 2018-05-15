@@ -5,17 +5,17 @@
  */
 'use strict';
 
-/* globals self, Util */
+/* globals self, Util2X */
 
-class CategoryRenderer {
+class CategoryRenderer2X {
   /**
-   * @param {!DOM} dom
-   * @param {!DetailsRenderer} detailsRenderer
+   * @param {!DOM2X} dom
+   * @param {!DetailsRenderer2X} detailsRenderer
    */
   constructor(dom, detailsRenderer) {
-    /** @protected {!DOM} */
+    /** @protected {!DOM2X} */
     this.dom = dom;
-    /** @protected {!DetailsRenderer} */
+    /** @protected {!DetailsRenderer2X} */
     this.detailsRenderer = detailsRenderer;
     /** @protected {!Document|!Element} */
     this.templateContext = this.dom.document();
@@ -24,7 +24,7 @@ class CategoryRenderer {
   }
 
   /**
-   * @param {!ReportRenderer.AuditJSON} audit
+   * @param {!ReportRenderer2X.AuditJSON} audit
    * @return {!Element}
    */
   _renderAuditScore(audit) {
@@ -61,7 +61,7 @@ class CategoryRenderer {
   }
 
   /**
-   * @param {!DocumentFragment|!Element} element DOM node to populate with values.
+   * @param {!DocumentFragment|!Element} element DOM2X node to populate with values.
    * @param {number} score
    * @param {string} scoringMode
    * @param {string} title
@@ -71,8 +71,8 @@ class CategoryRenderer {
   _populateScore(element, score, scoringMode, title, description) {
     // Fill in the blanks.
     const valueEl = this.dom.find('.lh-score__value', element);
-    valueEl.textContent = Util.formatNumber(score);
-    valueEl.classList.add(`lh-score__value--${Util.calculateRating(score)}`,
+    valueEl.textContent = Util2X.formatNumber(score);
+    valueEl.classList.add(`lh-score__value--${Util2X.calculateRating(score)}`,
         `lh-score__value--${scoringMode}`);
 
     this.dom.find('.lh-score__title', element).appendChild(
@@ -84,7 +84,7 @@ class CategoryRenderer {
   }
 
   /**
-   * @param {!ReportRenderer.CategoryJSON} category
+   * @param {!ReportRenderer2X.CategoryJSON} category
    * @return {!Element}
    */
   renderCategoryScore(category) {
@@ -99,7 +99,7 @@ class CategoryRenderer {
   }
 
   /**
-   * @param {!ReportRenderer.AuditJSON} audit
+   * @param {!ReportRenderer2X.AuditJSON} audit
    * @return {!Element}
    */
   renderAudit(audit) {
@@ -111,7 +111,7 @@ class CategoryRenderer {
   /**
    * Renders the group container for a group of audits. Individual audit elements can be added
    * directly to the returned element.
-   * @param {!ReportRenderer.GroupJSON} group
+   * @param {!ReportRenderer2X.GroupJSON} group
    * @param {{expandable: boolean}} opts
    * @return {!Element}
    */
@@ -195,13 +195,13 @@ class CategoryRenderer {
   }
 
   /**
-   * @param {!Array<!ReportRenderer.AuditJSON>} manualAudits
-   * @param {!Object<string, !ReportRenderer.GroupJSON>} groupDefinitions
+   * @param {!Array<!ReportRenderer2X.AuditJSON>} manualAudits
+   * @param {!Object<string, !ReportRenderer2X.GroupJSON>} groupDefinitions
    * @param {!Element} element Parent container to add the manual audits to.
    */
   _renderManualAudits(manualAudits, groupDefinitions, element) {
     const auditsGroupedByGroup = /** @type {!Object<string,
-        !Array<!ReportRenderer.AuditJSON>>} */ ({});
+        !Array<!ReportRenderer2X.AuditJSON>>} */ ({});
     manualAudits.forEach(audit => {
       const group = auditsGroupedByGroup[audit.group] || [];
       group.push(audit);
@@ -230,7 +230,7 @@ class CategoryRenderer {
   }
 
   /**
-   * @param {!ReportRenderer.CategoryJSON} category
+   * @param {!ReportRenderer2X.CategoryJSON} category
    * @return {!DocumentFragment}
    */
   renderScoreGauge(category) {
@@ -243,7 +243,7 @@ class CategoryRenderer {
 
     const gauge = this.dom.find('.lh-gauge', tmpl);
     gauge.setAttribute('data-progress', score); // .dataset not supported in jsdom.
-    gauge.classList.add(`lh-gauge--${Util.calculateRating(score)}`);
+    gauge.classList.add(`lh-gauge--${Util2X.calculateRating(score)}`);
 
     this.dom.findAll('.lh-gauge__fill', gauge).forEach(el => {
       el.style.transform = `rotate(${fillRotation}deg)`;
@@ -259,8 +259,8 @@ class CategoryRenderer {
   }
 
   /**
-   * @param {!ReportRenderer.CategoryJSON} category
-   * @param {!Object<string, !ReportRenderer.GroupJSON>} groupDefinitions
+   * @param {!ReportRenderer2X.CategoryJSON} category
+   * @param {!Object<string, !ReportRenderer2X.GroupJSON>} groupDefinitions
    * @return {!Element}
    */
   render(category, groupDefinitions) {
@@ -272,9 +272,9 @@ class CategoryRenderer {
     const nonManualAudits = category.audits.filter(audit => !manualAudits.includes(audit));
 
     const auditsGroupedByGroup = /** @type {!Object<string,
-      {passed: !Array<!ReportRenderer.AuditJSON>,
-      failed: !Array<!ReportRenderer.AuditJSON>,
-      notApplicable: !Array<!ReportRenderer.AuditJSON>}>} */ ({});
+      {passed: !Array<!ReportRenderer2X.AuditJSON>,
+      failed: !Array<!ReportRenderer2X.AuditJSON>,
+      notApplicable: !Array<!ReportRenderer2X.AuditJSON>}>} */ ({});
     const auditsUngrouped = {passed: [], failed: [], notApplicable: []};
 
     nonManualAudits.forEach(audit => {
@@ -306,11 +306,11 @@ class CategoryRenderer {
     const passedElements = /** @type {!Array<!Element>} */ ([]);
     const notApplicableElements = /** @type {!Array<!Element>} */ ([]);
 
-    auditsUngrouped.failed.forEach((/** @type {!ReportRenderer.AuditJSON} */ audit) =>
+    auditsUngrouped.failed.forEach((/** @type {!ReportRenderer2X.AuditJSON} */ audit) =>
       failedElements.push(this.renderAudit(audit)));
-    auditsUngrouped.passed.forEach((/** @type {!ReportRenderer.AuditJSON} */ audit) =>
+    auditsUngrouped.passed.forEach((/** @type {!ReportRenderer2X.AuditJSON} */ audit) =>
       passedElements.push(this.renderAudit(audit)));
-    auditsUngrouped.notApplicable.forEach((/** @type {!ReportRenderer.AuditJSON} */ audit) =>
+    auditsUngrouped.notApplicable.forEach((/** @type {!ReportRenderer2X.AuditJSON} */ audit) =>
       notApplicableElements.push(this.renderAudit(audit)));
 
     let hasFailedGroups = false;
@@ -379,7 +379,7 @@ class CategoryRenderer {
 }
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = CategoryRenderer;
+  module.exports = CategoryRenderer2X;
 } else {
-  self.CategoryRenderer = CategoryRenderer;
+  self.CategoryRenderer2X = CategoryRenderer2X;
 }

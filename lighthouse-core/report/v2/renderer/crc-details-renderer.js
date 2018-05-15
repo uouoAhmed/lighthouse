@@ -10,13 +10,13 @@
  * critical request chains network tree.
  */
 
-/* globals self Util */
+/* globals self Util2X */
 
-class CriticalRequestChainRenderer {
+class CriticalRequestChainRenderer2X {
   /**
    * Create render context for critical-request-chain tree display.
-   * @param {!Object<string, !CriticalRequestChainRenderer.CRCNode>} tree
-   * @return {{tree: !Object<string, !CriticalRequestChainRenderer.CRCNode>, startTime: number, transferSize: number}}
+   * @param {!Object<string, !CriticalRequestChainRenderer2X.CRCNode>} tree
+   * @return {{tree: !Object<string, !CriticalRequestChainRenderer2X.CRCNode>, startTime: number, transferSize: number}}
    */
   static initTree(tree) {
     let startTime = 0;
@@ -34,13 +34,13 @@ class CriticalRequestChainRenderer {
    * parent. Calculates if this node is the last child, whether it has any
    * children itself and what the tree looks like all the way back up to the root,
    * so the tree markers can be drawn correctly.
-   * @param {!Object<string, !CriticalRequestChainRenderer.CRCNode>} parent
+   * @param {!Object<string, !CriticalRequestChainRenderer2X.CRCNode>} parent
    * @param {string} id
    * @param {number} startTime
    * @param {number} transferSize
    * @param {!Array<boolean>=} treeMarkers
    * @param {boolean=} parentIsLastChild
-   * @return {!CriticalRequestChainRenderer.CRCSegment}
+   * @return {!CriticalRequestChainRenderer2X.CRCSegment}
    */
   static createSegment(parent, id, startTime, transferSize, treeMarkers, parentIsLastChild) {
     const node = parent[id];
@@ -67,10 +67,10 @@ class CriticalRequestChainRenderer {
   }
 
   /**
-   * Creates the DOM for a tree segment.
-   * @param {!DOM} dom
+   * Creates the DOM2X for a tree segment.
+   * @param {!DOM2X} dom
    * @param {!DocumentFragment} tmpl
-   * @param {!CriticalRequestChainRenderer.CRCSegment} segment
+   * @param {!CriticalRequestChainRenderer2X.CRCSegment} segment
    * @return {!Node}
    */
   static createChainNode(dom, tmpl, segment) {
@@ -107,17 +107,17 @@ class CriticalRequestChainRenderer {
     }
 
     // Fill in url, host, and request size information.
-    const {file, hostname} = Util.parseURL(segment.node.request.url);
+    const {file, hostname} = Util2X.parseURL(segment.node.request.url);
     const treevalEl = dom.find('.crc-node__tree-value', chainsEl);
     dom.find('.crc-node__tree-file', treevalEl).textContent = `${file}`;
     dom.find('.crc-node__tree-hostname', treevalEl).textContent = `(${hostname})`;
 
     if (!segment.hasChildren) {
       const span = dom.createElement('span', 'crc-node__chain-duration');
-      span.textContent = ' - ' + Util.chainDuration(
+      span.textContent = ' - ' + Util2X.chainDuration(
           segment.node.request.startTime, segment.node.request.endTime) + 'ms, ';
       const span2 = dom.createElement('span', 'crc-node__chain-duration');
-      span2.textContent = Util.formatBytesToKB(segment.node.request.transferSize);
+      span2.textContent = Util2X.formatBytesToKB(segment.node.request.transferSize);
 
       treevalEl.appendChild(span);
       treevalEl.appendChild(span2);
@@ -128,26 +128,26 @@ class CriticalRequestChainRenderer {
 
   /**
    * Recursively builds a tree from segments.
-   * @param {!DOM} dom
+   * @param {!DOM2X} dom
    * @param {!DocumentFragment} tmpl
-   * @param {!CriticalRequestChainRenderer.CRCSegment} segment
+   * @param {!CriticalRequestChainRenderer2X.CRCSegment} segment
    * @param {!Element} detailsEl Parent details element.
-   * @param {!CriticalRequestChainRenderer.CRCDetailsJSON} details
+   * @param {!CriticalRequestChainRenderer2X.CRCDetailsJSON} details
    */
   static buildTree(dom, tmpl, segment, detailsEl, details) {
-    detailsEl.appendChild(CriticalRequestChainRenderer.createChainNode(dom, tmpl, segment));
+    detailsEl.appendChild(CriticalRequestChainRenderer2X.createChainNode(dom, tmpl, segment));
 
     for (const key of Object.keys(segment.node.children)) {
-      const childSegment = CriticalRequestChainRenderer.createSegment(segment.node.children, key,
+      const childSegment = CriticalRequestChainRenderer2X.createSegment(segment.node.children, key,
          segment.startTime, segment.transferSize, segment.treeMarkers, segment.isLastChild);
-      CriticalRequestChainRenderer.buildTree(dom, tmpl, childSegment, detailsEl, details);
+      CriticalRequestChainRenderer2X.buildTree(dom, tmpl, childSegment, detailsEl, details);
     }
   }
 
   /**
-   * @param {!DOM} dom
+   * @param {!DOM2X} dom
    * @param {!Node} templateContext
-   * @param {!CriticalRequestChainRenderer.CRCDetailsJSON} details
+   * @param {!CriticalRequestChainRenderer2X.CRCDetailsJSON} details
    * @return {!Node}
    */
   static render(dom, templateContext, details) {
@@ -155,10 +155,10 @@ class CriticalRequestChainRenderer {
 
     // Fill in top summary.
     dom.find('.lh-crc__longest_duration', tmpl).textContent =
-        Util.formatNumber(details.longestChain.duration) + 'ms';
+        Util2X.formatNumber(details.longestChain.duration) + 'ms';
     dom.find('.lh-crc__longest_length', tmpl).textContent = details.longestChain.length;
     dom.find('.lh-crc__longest_transfersize', tmpl).textContent =
-        Util.formatBytesToKB(details.longestChain.transferSize);
+        Util2X.formatBytesToKB(details.longestChain.transferSize);
 
     const detailsEl = dom.find('.lh-details', tmpl);
     detailsEl.open = true;
@@ -166,11 +166,11 @@ class CriticalRequestChainRenderer {
     dom.find('.lh-details > summary', tmpl).textContent = details.header.text;
 
     // Construct visual tree.
-    const root = CriticalRequestChainRenderer.initTree(details.chains);
+    const root = CriticalRequestChainRenderer2X.initTree(details.chains);
     for (const key of Object.keys(root.tree)) {
-      const segment = CriticalRequestChainRenderer.createSegment(root.tree, key,
+      const segment = CriticalRequestChainRenderer2X.createSegment(root.tree, key,
           root.startTime, root.transferSize);
-      CriticalRequestChainRenderer.buildTree(dom, tmpl, segment, detailsEl, details);
+      CriticalRequestChainRenderer2X.buildTree(dom, tmpl, segment, detailsEl, details);
     }
 
     return tmpl;
@@ -179,19 +179,19 @@ class CriticalRequestChainRenderer {
 
 // Allow Node require()'ing.
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = CriticalRequestChainRenderer;
+  module.exports = CriticalRequestChainRenderer2X;
 } else {
-  self.CriticalRequestChainRenderer = CriticalRequestChainRenderer;
+  self.CriticalRequestChainRenderer2X = CriticalRequestChainRenderer2X;
 }
 
 /** @typedef {{
  *     type: string,
  *     header: {text: string},
  *     longestChain: {duration: number, length: number, transferSize: number},
- *     chains: !Object<string, !CriticalRequestChainRenderer.CRCNode>
+ *     chains: !Object<string, !CriticalRequestChainRenderer2X.CRCNode>
  * }}
  */
-CriticalRequestChainRenderer.CRCDetailsJSON; // eslint-disable-line no-unused-expressions
+CriticalRequestChainRenderer2X.CRCDetailsJSON; // eslint-disable-line no-unused-expressions
 
 /** @typedef {{
  *     endTime: number,
@@ -201,23 +201,23 @@ CriticalRequestChainRenderer.CRCDetailsJSON; // eslint-disable-line no-unused-ex
  *     url: string
  * }}
  */
-CriticalRequestChainRenderer.CRCRequest; // eslint-disable-line no-unused-expressions
+CriticalRequestChainRenderer2X.CRCRequest; // eslint-disable-line no-unused-expressions
 
 /**
  * Record type so children can circularly have CRCNode values.
  * @struct
  * @record
  */
-CriticalRequestChainRenderer.CRCNode = function() {};
+CriticalRequestChainRenderer2X.CRCNode = function() {};
 
-/** @type {!Object<string, !CriticalRequestChainRenderer.CRCNode>} */
-CriticalRequestChainRenderer.CRCNode.prototype.children; // eslint-disable-line no-unused-expressions
+/** @type {!Object<string, !CriticalRequestChainRenderer2X.CRCNode>} */
+CriticalRequestChainRenderer2X.CRCNode.prototype.children; // eslint-disable-line no-unused-expressions
 
-/** @type {!CriticalRequestChainRenderer.CRCRequest} */
-CriticalRequestChainRenderer.CRCNode.prototype.request; // eslint-disable-line no-unused-expressions
+/** @type {!CriticalRequestChainRenderer2X.CRCRequest} */
+CriticalRequestChainRenderer2X.CRCNode.prototype.request; // eslint-disable-line no-unused-expressions
 
 /** @typedef {{
- *     node: !CriticalRequestChainRenderer.CRCNode,
+ *     node: !CriticalRequestChainRenderer2X.CRCNode,
  *     isLastChild: boolean,
  *     hasChildren: boolean,
  *     startTime: number,
@@ -225,4 +225,4 @@ CriticalRequestChainRenderer.CRCNode.prototype.request; // eslint-disable-line n
  *     treeMarkers: !Array<boolean>
  * }}
  */
-CriticalRequestChainRenderer.CRCSegment; // eslint-disable-line no-unused-expressions
+CriticalRequestChainRenderer2X.CRCSegment; // eslint-disable-line no-unused-expressions

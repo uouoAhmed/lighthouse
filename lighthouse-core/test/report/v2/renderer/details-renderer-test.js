@@ -9,28 +9,28 @@ const assert = require('assert');
 const fs = require('fs');
 const jsdom = require('jsdom');
 const URL = require('../../../../lib/url-shim');
-const DOM = require('../../../../report/v2/renderer/dom.js');
-const Util = require('../../../../report/v2/renderer/util.js');
-const DetailsRenderer = require('../../../../report/v2/renderer/details-renderer.js');
+const DOM2X = require('../../../../report/v2/renderer/dom.js');
+const Util2X = require('../../../../report/v2/renderer/util.js');
+const DetailsRenderer2X = require('../../../../report/v2/renderer/details-renderer.js');
 
 const TEMPLATE_FILE = fs.readFileSync(__dirname + '/../../../../report/v2/templates.html', 'utf8');
 
 /* eslint-env mocha */
 
-describe('DetailsRenderer', () => {
+describe('DetailsRenderer2X', () => {
   let renderer;
 
   before(() => {
     global.URL = URL;
-    global.Util = Util;
+    global.Util2X = Util2X;
     const document = jsdom.jsdom(TEMPLATE_FILE);
-    const dom = new DOM(document);
-    renderer = new DetailsRenderer(dom);
+    const dom = new DOM2X(document);
+    renderer = new DetailsRenderer2X(dom);
   });
 
   after(() => {
     global.URL = undefined;
-    global.Util = undefined;
+    global.Util2X = undefined;
   });
 
   describe('render', () => {
@@ -78,8 +78,8 @@ describe('DetailsRenderer', () => {
       const list = {
         header: {type: 'text', text: 'View details'},
         items: [
-          {title: 'Total DOM Nodes', value: 3500, target: '1,500 nodes'},
-          {title: 'DOM Depth', value: 10, snippet: 'snippet'},
+          {title: 'Total DOM2X Nodes', value: 3500, target: '1,500 nodes'},
+          {title: 'DOM2X Depth', value: 10, snippet: 'snippet'},
           {title: 'Maximum Children', value: 20, snippet: 'snippet2', target: 20},
         ],
       };
@@ -93,7 +93,7 @@ describe('DetailsRenderer', () => {
       assert.equal(cards[0].hasAttribute('title'), false,
           'does not add title attr if snippet is missing');
       assert.equal(cards[0].querySelector('.lh-scorecard__title').textContent,
-          'Total DOM Nodes', 'fills title');
+          'Total DOM2X Nodes', 'fills title');
       assert.equal(cards[0].querySelector('.lh-scorecard__value').textContent,
           '3500', 'fills value');
       assert.equal(cards[0].querySelector('.lh-scorecard__target').textContent,

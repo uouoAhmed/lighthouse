@@ -5,18 +5,18 @@
  */
 'use strict';
 
-/* globals self, Util, CategoryRenderer */
+/* globals self, Util2X, CategoryRenderer2X */
 
-class PerformanceCategoryRenderer extends CategoryRenderer {
+class PerformanceCategoryRenderer2X extends CategoryRenderer2X {
   /**
-   * @param {!ReportRenderer.AuditJSON} audit
+   * @param {!ReportRenderer2X.AuditJSON} audit
    * @param {number} scale
    * @return {!Element}
    */
   _renderTimelineMetricAudit(audit, scale) {
     const tmpl = this.dom.cloneTemplate('#tmpl-lh-timeline-metric', this.templateContext);
     const element = this.dom.find('.lh-timeline-metric', tmpl);
-    element.classList.add(`lh-timeline-metric--${Util.calculateRating(audit.score)}`);
+    element.classList.add(`lh-timeline-metric--${Util2X.calculateRating(audit.score)}`);
 
     const titleEl = this.dom.find('.lh-timeline-metric__title', tmpl);
     titleEl.textContent = audit.result.description;
@@ -40,18 +40,18 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
   }
 
   /**
-   * @param {!ReportRenderer.AuditJSON} audit
+   * @param {!ReportRenderer2X.AuditJSON} audit
    * @param {number} scale
    * @return {!Element}
    */
   _renderPerfHintAudit(audit, scale) {
-    const extendedInfo = /** @type {!PerformanceCategoryRenderer.PerfHintExtendedInfo}
+    const extendedInfo = /** @type {!PerformanceCategoryRenderer2X.PerfHintExtendedInfo}
         */ (audit.result.extendedInfo);
     const tooltipAttrs = {title: audit.result.displayValue};
 
     const element = this.dom.createElement('details', [
       'lh-perf-hint',
-      `lh-perf-hint--${Util.calculateRating(audit.score)}`,
+      `lh-perf-hint--${Util2X.calculateRating(audit.score)}`,
       'lh-expandable-details',
     ].join(' '));
 
@@ -76,11 +76,11 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
 
     const statsEl = this.dom.createChildOf(summary, 'div', 'lh-perf-hint__stats', tooltipAttrs);
     const statsMsEl = this.dom.createChildOf(statsEl, 'div', 'lh-perf-hint__primary-stat');
-    statsMsEl.textContent = Util.formatMilliseconds(audit.result.rawValue);
+    statsMsEl.textContent = Util2X.formatMilliseconds(audit.result.rawValue);
 
     if (extendedInfo.value.wastedKb) {
       const statsKbEl = this.dom.createChildOf(statsEl, 'div', 'lh-perf-hint__secondary-stat');
-      statsKbEl.textContent = Util.formatNumber(extendedInfo.value.wastedKb) + ' KB';
+      statsKbEl.textContent = Util2X.formatNumber(extendedInfo.value.wastedKb) + ' KB';
     }
 
     const descriptionEl = this.dom.createChildOf(element, 'div', 'lh-perf-hint__description');
@@ -122,7 +122,7 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
     const thumbnailAudit = category.audits.find(audit => audit.id === 'screenshot-thumbnails');
     const thumbnailResult = thumbnailAudit && thumbnailAudit.result;
     if (thumbnailResult && thumbnailResult.details) {
-      const thumbnailDetails = /** @type {!DetailsRenderer.FilmstripDetails} */
+      const thumbnailDetails = /** @type {!DetailsRenderer2X.FilmstripDetails} */
           (thumbnailResult.details);
       perfTimelineScale = Math.max(perfTimelineScale, thumbnailDetails.scale);
       const filmstripEl = this.detailsRenderer.render(thumbnailDetails);
@@ -175,9 +175,9 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
 }
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = PerformanceCategoryRenderer;
+  module.exports = PerformanceCategoryRenderer2X;
 } else {
-  self.PerformanceCategoryRenderer = PerformanceCategoryRenderer;
+  self.PerformanceCategoryRenderer2X = PerformanceCategoryRenderer2X;
 }
 
 /**
@@ -188,4 +188,4 @@ if (typeof module !== 'undefined' && module.exports) {
  *     }
  * }}
  */
-PerformanceCategoryRenderer.PerfHintExtendedInfo; // eslint-disable-line no-unused-expressions
+PerformanceCategoryRenderer2X.PerfHintExtendedInfo; // eslint-disable-line no-unused-expressions

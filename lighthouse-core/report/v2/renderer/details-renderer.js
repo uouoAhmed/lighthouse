@@ -5,14 +5,14 @@
  */
 'use strict';
 
-/* globals self CriticalRequestChainRenderer Util URL */
+/* globals self CriticalRequestChainRenderer2X Util2X URL */
 
-class DetailsRenderer {
+class DetailsRenderer2X {
   /**
-   * @param {!DOM} dom
+   * @param {!DOM2X} dom
    */
   constructor(dom) {
-    /** @private {!DOM} */
+    /** @private {!DOM2X} */
     this._dom = dom;
     /** @private {!Document|!Element} */
     this._templateContext; // eslint-disable-line no-unused-expressions
@@ -26,7 +26,7 @@ class DetailsRenderer {
   }
 
   /**
-   * @param {!DetailsRenderer.DetailsJSON} details
+   * @param {!DetailsRenderer2X.DetailsJSON} details
    * @return {!Node}
    */
   render(details) {
@@ -36,31 +36,31 @@ class DetailsRenderer {
       case 'url':
         return this._renderTextURL(details);
       case 'link':
-        return this._renderLink(/** @type {!DetailsRenderer.LinkDetailsJSON} */ (details));
+        return this._renderLink(/** @type {!DetailsRenderer2X.LinkDetailsJSON} */ (details));
       case 'thumbnail':
-        return this._renderThumbnail(/** @type {!DetailsRenderer.ThumbnailDetails} */ (details));
+        return this._renderThumbnail(/** @type {!DetailsRenderer2X.ThumbnailDetails} */ (details));
       case 'filmstrip':
-        return this._renderFilmstrip(/** @type {!DetailsRenderer.FilmstripDetails} */ (details));
+        return this._renderFilmstrip(/** @type {!DetailsRenderer2X.FilmstripDetails} */ (details));
       case 'cards':
-        return this._renderCards(/** @type {!DetailsRenderer.CardsDetailsJSON} */ (details));
+        return this._renderCards(/** @type {!DetailsRenderer2X.CardsDetailsJSON} */ (details));
       case 'table':
-        return this._renderTable(/** @type {!DetailsRenderer.TableDetailsJSON} */ (details));
+        return this._renderTable(/** @type {!DetailsRenderer2X.TableDetailsJSON} */ (details));
       case 'code':
         return this._renderCode(details);
       case 'node':
-        return this.renderNode(/** @type {!DetailsRenderer.NodeDetailsJSON} */(details));
+        return this.renderNode(/** @type {!DetailsRenderer2X.NodeDetailsJSON} */(details));
       case 'criticalrequestchain':
-        return CriticalRequestChainRenderer.render(this._dom, this._templateContext,
-          /** @type {!CriticalRequestChainRenderer.CRCDetailsJSON} */ (details));
+        return CriticalRequestChainRenderer2X.render(this._dom, this._templateContext,
+          /** @type {!CriticalRequestChainRenderer2X.CRCDetailsJSON} */ (details));
       case 'list':
-        return this._renderList(/** @type {!DetailsRenderer.ListDetailsJSON} */ (details));
+        return this._renderList(/** @type {!DetailsRenderer2X.ListDetailsJSON} */ (details));
       default:
         throw new Error(`Unknown type: ${details.type}`);
     }
   }
 
   /**
-   * @param {!DetailsRenderer.DetailsJSON} text
+   * @param {!DetailsRenderer2X.DetailsJSON} text
    * @return {!Element}
    */
   _renderTextURL(text) {
@@ -70,7 +70,7 @@ class DetailsRenderer {
     let displayedHost;
     let title;
     try {
-      const parsed = Util.parseURL(url);
+      const parsed = Util2X.parseURL(url);
       displayedPath = parsed.file;
       displayedHost = `(${parsed.hostname})`;
       title = url;
@@ -101,7 +101,7 @@ class DetailsRenderer {
   }
 
   /**
-   * @param {!DetailsRenderer.LinkDetailsJSON} details
+   * @param {!DetailsRenderer2X.LinkDetailsJSON} details
    * @return {!Element}
    */
   _renderLink(details) {
@@ -122,7 +122,7 @@ class DetailsRenderer {
   }
 
   /**
-   * @param {!DetailsRenderer.DetailsJSON} text
+   * @param {!DetailsRenderer2X.DetailsJSON} text
    * @return {!Element}
    */
   _renderText(text) {
@@ -134,7 +134,7 @@ class DetailsRenderer {
   /**
    * Create small thumbnail with scaled down image asset.
    * If the supplied details doesn't have an image/* mimeType, then an empty span is returned.
-   * @param {!DetailsRenderer.ThumbnailDetails} value
+   * @param {!DetailsRenderer2X.ThumbnailDetails} value
    * @return {!Element}
    */
   _renderThumbnail(value) {
@@ -150,7 +150,7 @@ class DetailsRenderer {
   }
 
   /**
-   * @param {!DetailsRenderer.ListDetailsJSON} list
+   * @param {!DetailsRenderer2X.ListDetailsJSON} list
    * @return {!Element}
    */
   _renderList(list) {
@@ -173,7 +173,7 @@ class DetailsRenderer {
   }
 
   /**
-   * @param {!DetailsRenderer.TableDetailsJSON} details
+   * @param {!DetailsRenderer2X.TableDetailsJSON} details
    * @return {!Element}
    */
   _renderTable(details) {
@@ -207,7 +207,7 @@ class DetailsRenderer {
   }
 
   /**
-   * @param {!DetailsRenderer.NodeDetailsJSON} item
+   * @param {!DetailsRenderer2X.NodeDetailsJSON} item
    * @return {!Element}
    * @protected
    */
@@ -223,7 +223,7 @@ class DetailsRenderer {
   }
 
   /**
-   * @param {!DetailsRenderer.CardsDetailsJSON} details
+   * @param {!DetailsRenderer2X.CardsDetailsJSON} details
    * @return {!Element}
    */
   _renderCards(details) {
@@ -254,7 +254,7 @@ class DetailsRenderer {
   }
 
   /**
-   * @param {!DetailsRenderer.FilmstripDetails} details
+   * @param {!DetailsRenderer2X.FilmstripDetails} details
    * @return {!Element}
    */
   _renderFilmstrip(details) {
@@ -263,9 +263,9 @@ class DetailsRenderer {
     for (const thumbnail of details.items) {
       const frameEl = this._dom.createChildOf(filmstripEl, 'div', 'lh-filmstrip__frame');
 
-      let timing = Util.formatMilliseconds(thumbnail.timing, 1);
+      let timing = Util2X.formatMilliseconds(thumbnail.timing, 1);
       if (thumbnail.timing > 1000) {
-        timing = Util.formatNumber(thumbnail.timing / 1000) + ' s';
+        timing = Util2X.formatNumber(thumbnail.timing / 1000) + ' s';
       }
 
       const timingEl = this._dom.createChildOf(frameEl, 'div', 'lh-filmstrip__timestamp');
@@ -282,7 +282,7 @@ class DetailsRenderer {
   }
 
   /**
-   * @param {!DetailsRenderer.DetailsJSON} details
+   * @param {!DetailsRenderer2X.DetailsJSON} details
    * @return {!Element}
    */
   _renderCode(details) {
@@ -293,9 +293,9 @@ class DetailsRenderer {
 }
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = DetailsRenderer;
+  module.exports = DetailsRenderer2X;
 } else {
-  self.DetailsRenderer = DetailsRenderer;
+  self.DetailsRenderer2X = DetailsRenderer2X;
 }
 
 /**
@@ -304,7 +304,7 @@ if (typeof module !== 'undefined' && module.exports) {
  *     text: (string|undefined)
  * }}
  */
-DetailsRenderer.DetailsJSON; // eslint-disable-line no-unused-expressions
+DetailsRenderer2X.DetailsJSON; // eslint-disable-line no-unused-expressions
 
 /**
  * @typedef {{
@@ -313,7 +313,7 @@ DetailsRenderer.DetailsJSON; // eslint-disable-line no-unused-expressions
  *     items: !Array<{type: string, text: (string|undefined)}>
  * }}
  */
-DetailsRenderer.ListDetailsJSON; // eslint-disable-line no-unused-expressions
+DetailsRenderer2X.ListDetailsJSON; // eslint-disable-line no-unused-expressions
 
 /**
  * @typedef {{
@@ -324,7 +324,7 @@ DetailsRenderer.ListDetailsJSON; // eslint-disable-line no-unused-expressions
  *     snippet:(string|undefined)
  * }}
  */
-DetailsRenderer.NodeDetailsJSON; // eslint-disable-line no-unused-expressions
+DetailsRenderer2X.NodeDetailsJSON; // eslint-disable-line no-unused-expressions
 
 /** @typedef {{
  *     type: string,
@@ -332,7 +332,7 @@ DetailsRenderer.NodeDetailsJSON; // eslint-disable-line no-unused-expressions
  *     items: !Array<{title: string, value: string, snippet: (string|undefined), target: string}>
  * }}
  */
-DetailsRenderer.CardsDetailsJSON; // eslint-disable-line no-unused-expressions
+DetailsRenderer2X.CardsDetailsJSON; // eslint-disable-line no-unused-expressions
 
 /**
  * @typedef {{
@@ -341,7 +341,7 @@ DetailsRenderer.CardsDetailsJSON; // eslint-disable-line no-unused-expressions
  *     text: (string|undefined)
  * }}
  */
-DetailsRenderer.TableHeaderJSON; // eslint-disable-line no-unused-expressions
+DetailsRenderer2X.TableHeaderJSON; // eslint-disable-line no-unused-expressions
 
 /**
  * @typedef {{
@@ -352,16 +352,16 @@ DetailsRenderer.TableHeaderJSON; // eslint-disable-line no-unused-expressions
  *     snippet:(string|undefined)
  * }}
  */
-DetailsRenderer.NodeDetailsJSON; // eslint-disable-line no-unused-expressions
+DetailsRenderer2X.NodeDetailsJSON; // eslint-disable-line no-unused-expressions
 
 /** @typedef {{
  *     type: string,
  *     header: ({text: string}|undefined),
- *     items: !Array<!Array<!DetailsRenderer.DetailsJSON>>,
- *     itemHeaders: !Array<!DetailsRenderer.TableHeaderJSON>
+ *     items: !Array<!Array<!DetailsRenderer2X.DetailsJSON>>,
+ *     itemHeaders: !Array<!DetailsRenderer2X.TableHeaderJSON>
  * }}
  */
-DetailsRenderer.TableDetailsJSON; // eslint-disable-line no-unused-expressions
+DetailsRenderer2X.TableDetailsJSON; // eslint-disable-line no-unused-expressions
 
 /** @typedef {{
  *     type: string,
@@ -369,7 +369,7 @@ DetailsRenderer.TableDetailsJSON; // eslint-disable-line no-unused-expressions
  *     mimeType: ({text: string}|undefined)
  * }}
  */
-DetailsRenderer.ThumbnailDetails; // eslint-disable-line no-unused-expressions
+DetailsRenderer2X.ThumbnailDetails; // eslint-disable-line no-unused-expressions
 
 /** @typedef {{
  *     type: string,
@@ -377,7 +377,7 @@ DetailsRenderer.ThumbnailDetails; // eslint-disable-line no-unused-expressions
  *     text: string
  * }}
  */
-DetailsRenderer.LinkDetailsJSON; // eslint-disable-line no-unused-expressions
+DetailsRenderer2X.LinkDetailsJSON; // eslint-disable-line no-unused-expressions
 
 /** @typedef {{
  *     type: string,
@@ -385,4 +385,4 @@ DetailsRenderer.LinkDetailsJSON; // eslint-disable-line no-unused-expressions
  *     items: !Array<{timing: number, timestamp: number, data: string}>,
  * }}
  */
-DetailsRenderer.FilmstripDetails; // eslint-disable-line no-unused-expressions
+DetailsRenderer2X.FilmstripDetails; // eslint-disable-line no-unused-expressions

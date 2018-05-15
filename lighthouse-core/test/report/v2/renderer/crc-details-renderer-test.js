@@ -11,9 +11,9 @@ const assert = require('assert');
 const fs = require('fs');
 const jsdom = require('jsdom');
 const URL = require('../../../../lib/url-shim');
-const Util = require('../../../../report/v2/renderer/util.js');
-const DOM = require('../../../../report/v2/renderer/dom.js');
-const CriticalRequestChainRenderer =
+const Util2X = require('../../../../report/v2/renderer/util.js');
+const DOM2X = require('../../../../report/v2/renderer/dom.js');
+const CriticalRequestChainRenderer2X =
     require('../../../../report/v2/renderer/crc-details-renderer.js');
 
 const TEMPLATE_FILE = fs.readFileSync(__dirname + '/../../../../report/v2/templates.html', 'utf8');
@@ -73,23 +73,23 @@ const DETAILS = {
   },
 };
 
-describe('DetailsRenderer', () => {
+describe('DetailsRenderer2X', () => {
   let dom;
 
   before(() => {
     global.URL = URL;
-    global.Util = Util;
+    global.Util2X = Util2X;
     const document = jsdom.jsdom(TEMPLATE_FILE);
-    dom = new DOM(document);
+    dom = new DOM2X(document);
   });
 
   after(() => {
     global.URL = undefined;
-    global.Util = undefined;
+    global.Util2X = undefined;
   });
 
   it('renders tree structure', () => {
-    const el = CriticalRequestChainRenderer.render(dom, dom.document(), DETAILS);
+    const el = CriticalRequestChainRenderer2X.render(dom, dom.document(), DETAILS);
     const details = el.querySelector('.lh-details');
     const chains = details.querySelectorAll('.crc-node');
 
