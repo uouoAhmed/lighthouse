@@ -150,7 +150,7 @@
       "threshold": "426 Kb"
     },
     {
-      "path": "./lighthouse-viewer/dist/src/viewer.js",
+      "path": "./lighthouse-viewer/dist/src/viewer-reportgenerator.js",
       "threshold": "65 Kb"
     }
   ],
