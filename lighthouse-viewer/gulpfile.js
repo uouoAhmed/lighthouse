@@ -93,8 +93,8 @@ gulp.task('polyfills', () => {
   .pipe(gulp.dest(`dist/src/polyfills`));
 });
 
-// Combine multiple JS bundles into single viewer.js file.
-gulp.task('compile-js', () => {
+// Combine multiple JS bundles into single viewer-reportgenerator.js file.
+gulp.task('compile-js-generator', () => {
   // JS bundle from browserified ReportGenerator.
   const generatorFilename = __dirname + '/../lighthouse-core/report/v2/report-generator.js';
   const opts = {standalone: 'ReportGenerator'};
@@ -107,21 +107,32 @@ gulp.task('compile-js', () => {
   // JS bundle from report renderer scripts.
   const baseReportJs = streamFromString(ReportGenerator.reportJs, 'report.js');
 
+  // JS bundle of injectected global variable with current Lighthouse version.
+  const versionStr = `window.LH_CURRENT_VERSION = '${lighthousePackage.version}';`;
+  const versionJs = streamFromString(versionStr, 'report.js');
+
+  // Concat and uglify JS bundles in this order.
+  return streamqueue({objectMode: true}, generatorJs, baseReportJs, versionJs)
+    .pipe($.concat('viewer-reportgenerator.js', {newLine: ';\n'}))
+    .pipe(uglify())
+    .pipe(license())
+    .pipe(gulp.dest(`dist/src`));
+});
+
+
+// Combine multiple JS bundles into single viewer-app.js file.
+gulp.task('compile-js-viewer', () => {
   // JS bundle of library dependencies.
   const deps = gulp.src([
     'node_modules/idb-keyval/dist/idb-keyval-min.js',
   ]);
 
-  // JS bundle of injectected global variable with current Lighthouse version.
-  const versionStr = `window.LH_CURRENT_VERSION = '${lighthousePackage.version}';`;
-  const versionJs = streamFromString(versionStr, 'report.js');
-
   // JS bundle of viewer-specific JS files.
   const viewerJs = gulp.src('app/src/*.js');
 
   // Concat and uglify JS bundles in this order.
-  return streamqueue({objectMode: true}, generatorJs, baseReportJs, deps, versionJs, viewerJs)
-    .pipe($.concat('viewer.js', {newLine: ';\n'}))
+  return streamqueue({objectMode: true}, deps, viewerJs)
+    .pipe($.concat('viewer-app.js', {newLine: ';\n'}))
     .pipe(uglify())
     .pipe(license())
     .pipe(gulp.dest(`dist/src`));
@@ -159,7 +170,7 @@ gulp.task('watch', ['build'], () => {
     '../lighthouse-core/report/v2/report-generator.js',
     'app/src/*.js',
   ]).on('change', () => {
-    runSequence('compile-js');
+    runSequence(['compile-js-generator', 'compile-js-viewer']);
   });
 });
 
@@ -186,7 +197,7 @@ gulp.task('deploy', cb => {
 
 gulp.task('build', cb => {
   runSequence(
-    'lint', 'compile-js',
+    'lint', 'compile-js-generator', 'compile-js-viewer',
     ['html', 'pwa', 'images', 'concat-css', 'polyfills'], cb);
 });
 
