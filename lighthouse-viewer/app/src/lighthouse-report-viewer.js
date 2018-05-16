@@ -313,9 +313,6 @@ class LighthouseReportViewer {
         this._reportIsFromGist = false;
         this._replaceReportHtml(e.data.lhresults);
 
-        if (self.opener && !self.opener.closed) {
-          self.opener.postMessage({rendered: true}, '*');
-        }
         if (window.ga) {
           window.ga('send', 'event', 'report', 'open in viewer');
         }
