@@ -74,7 +74,7 @@ class ReportUIFeatures {
     this._setupMediaQueryListeners();
     this._setupExportButton();
     this._setUpCollapseDetailsAfterPrinting();
-    this._setupHeaderAnimation();
+    // this._setupHeaderAnimation();
     this._resetUIState();
     this._document.addEventListener('keydown', this.printShortCutDetect);
     this._document.addEventListener('copy', this.onCopy);
@@ -118,6 +118,8 @@ class ReportUIFeatures {
   _setupHeaderAnimation() {
     /** @type {!Element} **/
     const scoresWrapper = this._dom.find('.lh-scores-wrapper', this._document);
+    // Bail on legacy 2x reports.
+    if (!scoresWrapper) return;
     this.headerOverlap = /** @type {!number} */
       (scoresWrapper.computedStyleMap().get('margin-top').value);
 

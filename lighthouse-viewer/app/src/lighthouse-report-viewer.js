@@ -185,6 +185,9 @@ class LighthouseReportViewer {
   _loadInLegacyViewerVersion(json) {
     const elem = document.createElement('script');
     elem.src = './2x/viewer-reportgenerator2x.js';
+    fetch('./2x/templates2x.html').then(r => r.text()).then(text => {
+      document.getElementById('lh-templates').innerHTML = text;
+    });
 
     elem.onload = _ => {
       const dom = new DOM2X(document);
