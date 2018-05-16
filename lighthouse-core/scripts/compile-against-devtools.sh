@@ -16,7 +16,7 @@ set -x
 #     https://github.com/ChromeDevTools/devtools-frontend/blob/master/front_end/audits2/module.json#L20
 
 # (Currently this doesnt include logger or report-features)
-files_to_include="\"lighthouse\/renderer\/util.js\", \"lighthouse\/renderer\/dom.js\", \"lighthouse\/renderer\/category-renderer.js\", \"lighthouse\/renderer\/performance-category-renderer.js\", \"lighthouse\/renderer\/crc-details-renderer.js\", \"lighthouse\/renderer\/details-renderer.js\", \"lighthouse\/renderer\/report-renderer.js\","
+files_to_include="\"lighthouse\/renderer\/util.js\", \"lighthouse\/renderer\/dom.js\", \"lighthouse\/renderer\/category-renderer.js\", \"lighthouse\/renderer\/performance-category-renderer.js\", \"lighthouse\/renderer\/crc-details-renderer.js\", \"lighthouse\/renderer\/details-renderer.js\", \"lighthouse\/renderer\/report-renderer.js\""
 
 # -----------------------------
 
@@ -58,11 +58,13 @@ yarn devtools "$frontend_path/front_end/"
 #
 audit2_modulejson_path="$frontend_path/front_end/audits2/module.json"
 # remove existing renderer file mentions
+sed -i='' "s/\"lighthouse\/renderer\/report-renderer\.js\"/\"REPLACEMEWITHSOURCES\"/" $audit2_modulejson_path
 sed -i='' 's/.*\/renderer\/.*//' $audit2_modulejson_path
 # add in our hardcoded renderer file mentions
-sed -i='' "s/\"Audits2Panel\.js\"/ $files_to_include \"Audits2Panel.js\"/" $audit2_modulejson_path
+sed -i='' "s/\"REPLACEMEWITHSOURCES\"/$files_to_include/" $audit2_modulejson_path
 
 # compile, finally
 python "$frontend_path/scripts/compile_frontend.py" --protocol-externs-file "$protocol_path/externs/protocol_externs.js"
 
-# FYI the compile_frontend script deletes externs/protocol_externs.js when it's done.
+# The compile_frontend script deletes externs/protocol_externs.js when it's done.
+git -C "$protocol_path" checkout -- "$protocol_path/externs/protocol_externs.js"
