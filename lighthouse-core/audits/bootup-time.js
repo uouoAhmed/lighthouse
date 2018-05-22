@@ -73,18 +73,54 @@ class BootupTime extends Audit {
   }
 
   /**
+   * Summarize JS costs by URL
+   * @param {Map<string, Object<string, number>>} executionTimings
+   * @param {LH.Audit.Context} context
+   * @return {{results: Object, totalBootupTime: number, extendedInfo: Object}}
+   */
+  static execCostsByURL(executionTimings, context) {
+    let totalBootupTime = 0;
+    const settings = context.settings || {};
+    const multiplier = settings.throttlingMethod === 'simulate' ?
+        settings.throttling.cpuSlowdownMultiplier : 1;
+
+    /** @type {Object<string, Object<string, number>>} */
+    const extendedInfo = {};
+
+    const results = Array.from(executionTimings).map(([url, groups]) => {
+      // Add up the totalBootupTime for all the taskGroups
+      for (const [name, value] of Object.entries(groups)) {
+        groups[name] = value * multiplier;
+      }
+
+      extendedInfo[url] = groups;
+
+      const scriptingTotal = groups[groupIdToName.scripting] || 0;
+      const parseCompileTotal = groups[groupIdToName.scriptParseCompile] || 0;
+      totalBootupTime += scriptingTotal + parseCompileTotal;
+      return {
+        url: url,
+        sum: scriptingTotal + parseCompileTotal,
+        // Only reveal the javascript task costs
+        // Later we can account for forced layout costs, etc.
+        scripting: scriptingTotal,
+        scriptParseCompile: parseCompileTotal,
+      };
+    })
+    .filter(result => result.sum >= context.options.thresholdInMs)
+    .sort((a, b) => b.sum - a.sum);
+    return {results, totalBootupTime, extendedInfo};
+  }
+
+  /**
    * @param {LH.Artifacts} artifacts
    * @param {LH.Audit.Context} context
    * @return {Promise<LH.Audit.Product>}
    */
   static async audit(artifacts, context) {
-    const settings = context.settings || {};
     const trace = artifacts.traces[BootupTime.DEFAULT_PASS];
     const devtoolsTimelineModel = await artifacts.requestDevtoolsTimelineModel(trace);
     const executionTimings = BootupTime.getExecutionTimingsByURL(devtoolsTimelineModel);
-    let totalBootupTime = 0;
-    /** @type {Object<string, Object<string, number>>} */
-    const extendedInfo = {};
 
     const headings = [
       {key: 'url', itemType: 'url', text: 'URL'},
@@ -93,32 +129,7 @@ class BootupTime extends Audit {
         text: groupIdToName.scriptParseCompile},
     ];
 
-    const multiplier = settings.throttlingMethod === 'simulate' ?
-      settings.throttling.cpuSlowdownMultiplier : 1;
-    // map data in correct format to create a table
-    const results = Array.from(executionTimings)
-      .map(([url, groups]) => {
-        // Add up the totalBootupTime for all the taskGroups
-        for (const [name, value] of Object.entries(groups)) {
-          groups[name] = value * multiplier;
-        }
-
-        extendedInfo[url] = groups;
-
-        const scriptingTotal = groups[groupIdToName.scripting] || 0;
-        const parseCompileTotal = groups[groupIdToName.scriptParseCompile] || 0;
-        totalBootupTime += scriptingTotal + parseCompileTotal;
-        return {
-          url: url,
-          sum: scriptingTotal + parseCompileTotal,
-          // Only reveal the javascript task costs
-          // Later we can account for forced layout costs, etc.
-          scripting: scriptingTotal,
-          scriptParseCompile: parseCompileTotal,
-        };
-      })
-      .filter(result => result.sum >= context.options.thresholdInMs)
-      .sort((a, b) => b.sum - a.sum);
+    const {results, totalBootupTime, extendedInfo} = BootupTime.execCostsByURL(executionTimings, context);
 
     const summary = {wastedMs: totalBootupTime};
     const details = BootupTime.makeTableDetails(headings, results, summary);
