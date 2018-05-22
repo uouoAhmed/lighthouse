@@ -101,13 +101,13 @@ class BootupTime extends Audit {
         // Add up the totalBootupTime for all the taskGroups
         for (const [name, value] of Object.entries(groups)) {
           groups[name] = value * multiplier;
-          totalBootupTime += value * multiplier;
         }
 
         extendedInfo[url] = groups;
 
         const scriptingTotal = groups[groupIdToName.scripting] || 0;
         const parseCompileTotal = groups[groupIdToName.scriptParseCompile] || 0;
+        totalBootupTime += scriptingTotal + parseCompileTotal;
         return {
           url: url,
           sum: scriptingTotal + parseCompileTotal,
