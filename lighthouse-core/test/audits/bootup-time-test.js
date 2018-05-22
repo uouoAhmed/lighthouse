@@ -33,7 +33,7 @@ describe('Performance: bootup-time audit', () => {
     return BootupTime.audit(artifacts, {options: auditOptions}).then(output => {
       assert.equal(output.details.items.length, 4);
       assert.equal(output.score, 1);
-      assert.equal(Math.round(output.rawValue), 176);
+      assert.equal(Math.round(output.rawValue), 155);
 
       assert.deepEqual(roundedValueOf(output, 'https://pwa.rocks/script.js'), {[groupIdToName.scripting]: 31.8, [groupIdToName.styleLayout]: 5.5, [groupIdToName.scriptParseCompile]: 1.3});
       assert.deepEqual(roundedValueOf(output, 'https://www.googletagmanager.com/gtm.js?id=GTM-Q5SW'), {[groupIdToName.scripting]: 25, [groupIdToName.scriptParseCompile]: 5.5, [groupIdToName.styleLayout]: 1.2});
@@ -55,8 +55,8 @@ describe('Performance: bootup-time audit', () => {
     const output = await BootupTime.audit(artifacts, {options, settings});
 
     assert.equal(output.details.items.length, 7);
-    assert.equal(output.score, 0.99);
-    assert.equal(Math.round(output.rawValue), 528);
+    assert.equal(output.score, 1);
+    assert.equal(Math.round(output.rawValue), 464);
 
     assert.deepEqual(roundedValueOf(output, 'https://pwa.rocks/script.js'), {[groupIdToName.scripting]: 95.3, [groupIdToName.styleLayout]: 16.4, [groupIdToName.scriptParseCompile]: 3.9});
   });
