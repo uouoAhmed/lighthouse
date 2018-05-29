@@ -598,16 +598,42 @@ describe('Config', () => {
     });
   });
 
-  describe('generateNewFilteredConfig', () => {
+  describe('filterConfigIfNeeded', () => {
     it('should not mutate the original config', () => {
       const configCopy = JSON.parse(JSON.stringify(origConfig));
-      Config.generateNewFilteredConfig(configCopy, ['performance']);
+      configCopy.settings.onlyCategories = ['performance'];
+      const config = new Config(configCopy);
+      configCopy.settings.onlyCategories = null;
+      assert.equal(config.passes.length, 1, 'did not filter config');
       assert.deepStrictEqual(configCopy, origConfig, 'no mutations');
+    });
+
+    it('should generate the same filtered config, extended or original', () => {
+      const configCopy = JSON.parse(JSON.stringify(origConfig));
+      configCopy.settings.onlyCategories = ['performance'];
+      const config = new Config(configCopy);
+
+      const extended = {
+        extends: 'lighthouse:default',
+        settings: {
+          onlyCategories: ['performance'],
+        },
+      };
+      const extendedConfig = new Config(extended);
+
+      assert.equal(config.passes.length, 1, 'did not filter config');
+      assert.deepStrictEqual(config, extendedConfig, 'no mutations');
     });
 
     it('should filter out other passes if passed Performance', () => {
       const totalAuditCount = origConfig.audits.length;
-      const config = Config.generateNewFilteredConfig(origConfig, ['performance']);
+      const extended = {
+        extends: 'lighthouse:default',
+        settings: {
+          onlyCategories: ['performance'],
+        },
+      };
+      const config = new Config(extended);
       assert.equal(Object.keys(config.categories).length, 1, 'other categories are present');
       assert.equal(config.passes.length, 1, 'incorrect # of passes');
       assert.ok(config.audits.length < totalAuditCount, 'audit filtering probably failed');
@@ -615,21 +641,39 @@ describe('Config', () => {
 
     it('should filter out other passes if passed PWA', () => {
       const totalAuditCount = origConfig.audits.length;
-      const config = Config.generateNewFilteredConfig(origConfig, ['pwa']);
+      const extended = {
+        extends: 'lighthouse:default',
+        settings: {
+          onlyCategories: ['pwa'],
+        },
+      };
+      const config = new Config(extended);
       assert.equal(Object.keys(config.categories).length, 1, 'other categories are present');
       assert.ok(config.audits.length < totalAuditCount, 'audit filtering probably failed');
     });
 
     it('should filter out other passes if passed Best Practices', () => {
       const totalAuditCount = origConfig.audits.length;
-      const config = Config.generateNewFilteredConfig(origConfig, ['best-practices']);
+      const extended = {
+        extends: 'lighthouse:default',
+        settings: {
+          onlyCategories: ['best-practices'],
+        },
+      };
+      const config = new Config(extended);
       assert.equal(Object.keys(config.categories).length, 1, 'other categories are present');
       assert.equal(config.passes.length, 1, 'incorrect # of passes');
       assert.ok(config.audits.length < totalAuditCount, 'audit filtering probably failed');
     });
 
     it('should only run audits for ones named by the category', () => {
-      const config = Config.generateNewFilteredConfig(origConfig, ['performance']);
+      const extended = {
+        extends: 'lighthouse:default',
+        settings: {
+          onlyCategories: ['performance'],
+        },
+      };
+      const config = new Config(extended);
       const selectedCategory = origConfig.categories.performance;
       const auditCount = Object.keys(selectedCategory.auditRefs).length;
 
@@ -637,14 +681,26 @@ describe('Config', () => {
     });
 
     it('should only run specified audits', () => {
-      const config = Config.generateNewFilteredConfig(origConfig, [], ['works-offline']);
+      const extended = {
+        extends: 'lighthouse:default',
+        settings: {
+          onlyAudits: ['works-offline'],
+        },
+      };
+      const config = new Config(extended);
       assert.equal(config.passes.length, 2, 'incorrect # of passes');
       assert.equal(config.audits.length, 1, 'audit filtering failed');
     });
 
     it('should combine audits and categories additively', () => {
-      const config = Config.generateNewFilteredConfig(origConfig, ['performance'],
-          ['works-offline']);
+      const extended = {
+        extends: 'lighthouse:default',
+        settings: {
+          onlyCategories: ['performance'],
+          onlyAudits: ['works-offline'],
+        },
+      };
+      const config = new Config(extended);
       const selectedCategory = origConfig.categories.performance;
       const auditCount = Object.keys(selectedCategory.auditRefs).length + 1;
       assert.equal(config.passes.length, 2, 'incorrect # of passes');
@@ -652,7 +708,14 @@ describe('Config', () => {
     });
 
     it('should support redundant filtering', () => {
-      const config = Config.generateNewFilteredConfig(origConfig, ['pwa'], ['is-on-https']);
+      const extended = {
+        extends: 'lighthouse:default',
+        settings: {
+          onlyCategories: ['pwa'],
+          onlyAudits: ['is-on-https'],
+        },
+      };
+      const config = new Config(extended);
       const selectedCategory = origConfig.categories.pwa;
       const auditCount = Object.keys(selectedCategory.auditRefs).length;
       assert.equal(config.passes.length, 3, 'incorrect # of passes');
@@ -660,15 +723,22 @@ describe('Config', () => {
     });
   });
 
-  describe('expandAuditShorthandAndMergeOptions', () => {
+  describe('#requireAudits', () => {
     it('should merge audits', () => {
-      const audits = ['a', {path: 'b', options: {x: 1, y: 1}}, {path: 'b', options: {x: 2}}];
-      const merged = Config.expandAuditShorthandAndMergeOptions(audits);
-      assert.deepEqual(merged, [{path: 'a', options: {}}, {path: 'b', options: {x: 2, y: 1}}]);
+      const audits = [
+        'user-timings',
+        {path: 'is-on-https', options: {x: 1, y: 1}},
+        {path: 'is-on-https', options: {x: 2}},
+      ];
+      const merged = Config.requireAudits(audits);
+      // Round-trip through JSON to drop live 'implementation' prop.
+      const mergedJson = JSON.parse(JSON.stringify(merged));
+      assert.deepEqual(mergedJson,
+        [{path: 'user-timings', options: {}}, {path: 'is-on-https', options: {x: 2, y: 1}}]);
     });
   });
 
-  describe('expandGathererShorthandAndMergeOptions', () => {
+  describe('#requireGatherers', () => {
     it('should merge gatherers', () => {
       const gatherers = [
         'viewport-dimensions',
@@ -676,12 +746,14 @@ describe('Config', () => {
         {path: 'viewport-dimensions', options: {y: 1}},
       ];
 
-      const merged = Config.expandGathererShorthandAndMergeOptions([{gatherers}]);
-      assert.deepEqual(merged[0].gatherers, [{path: 'viewport-dimensions', options: {x: 1, y: 1}}]);
-    });
-  });
+      const merged = Config.requireGatherers([{gatherers}]);
+      // Round-trip through JSON to drop live 'instance'/'implementation' props.
+      const mergedJson = JSON.parse(JSON.stringify(merged));
 
-  describe('#requireGatherers', () => {
+      assert.deepEqual(mergedJson[0].gatherers,
+        [{path: 'viewport-dimensions', options: {x: 1, y: 1}, instance: {}}]);
+    });
+
     function loadGatherer(gathererEntry) {
       const config = new Config({passes: [{gatherers: [gathererEntry]}]});
       return config.passes[0].gatherers[0];
