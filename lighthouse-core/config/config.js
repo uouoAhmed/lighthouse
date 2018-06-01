@@ -340,16 +340,21 @@ class Config {
     Config.adjustDefaultPassForThrottling(settings, passesWithDefaults);
     const passes = Config.requireGatherers(passesWithDefaults, configDir);
 
-    this._settings = settings;
-    this._passes = passes;
-    this._audits = Config.requireAudits(configJSON.audits, configDir);
-    this._categories = configJSON.categories || null;
-    this._groups = configJSON.groups || null;
+    /** @type {LH.Config['settings']} */
+    this.settings = settings;
+    /** @type {LH.Config['passes']} */
+    this.passes = passes;
+    /** @type {LH.Config['audits']} */
+    this.audits = Config.requireAudits(configJSON.audits, configDir);
+    /** @type {LH.Config['categories']} */
+    this.categories = configJSON.categories || null;
+    /** @type {LH.Config['groups']} */
+    this.groups = configJSON.groups || null;
 
     Config.filterConfigIfNeeded(this);
 
-    validatePasses(this._passes, this._audits);
-    validateCategories(this._categories, this._audits, this._groups);
+    validatePasses(this.passes, this.audits);
+    validateCategories(this.categories, this.audits, this.groups);
   }
 
   /**
@@ -442,21 +447,21 @@ class Config {
    *  - {instance: myGathererInstance}
    *
    * @param {Array<LH.Config.GathererJson>} gatherers
-   * @return {Array<{path: string, options?: {}} | {implementation: GathererConstructor, options?: {}} | {instance: Gatherer, options?: {}}>} passes
+   * @return {Array<{instance?: Gatherer, implementation?: GathererConstructor, path?: string, options?: {}}>} passes
    */
   static expandGathererShorthand(gatherers) {
     const expanded = gatherers.map(gatherer => {
       if (typeof gatherer === 'string') {
         // just 'path/to/gatherer'
         return {path: gatherer, options: {}};
+      } else if ('implementation' in gatherer || 'instance' in gatherer) {
+        // {implementation: GathererConstructor, ...} or {instance: GathererInstance, ...}
+        return gatherer;
       } else if ('path' in gatherer) {
         // {path: 'path/to/gatherer', ...}
         if (typeof gatherer.path !== 'string') {
           throw new Error('Invalid Gatherer type ' + JSON.stringify(gatherer));
         }
-        return gatherer;
-      } else if ('implementation' in gatherer || 'instance' in gatherer) {
-        // {implementation: GathererConstructor, ...} or {instance: GathererInstance, ...}
         return gatherer;
       } else if (typeof gatherer === 'function') {
         // just GathererConstructor
@@ -519,9 +524,9 @@ class Config {
     // 4. Filter to only the neccessary passes
     const passes = Config.generatePassesNeededByGatherers(config.passes, requiredGathererIds);
 
-    config._categories = categories;
-    config._audits = audits;
-    config._passes = passes;
+    config.categories = categories;
+    config.audits = audits;
+    config.passes = passes;
   }
 
   /**
@@ -735,38 +740,43 @@ class Config {
     const coreList = Runner.getGathererList();
     const fullPasses = passes.map(pass => {
       const gathererDefns = Config.expandGathererShorthand(pass.gatherers).map(gathererDefn => {
-        if ('instance' in gathererDefn) {
+        if (gathererDefn.instance) {
           return {
             instance: gathererDefn.instance,
+            implementation: gathererDefn.implementation,
+            path: gathererDefn.path,
             options: gathererDefn.options || {},
           };
-        }
-
-        let GathererClass;
-        let path;
-        if ('implementation' in gathererDefn) {
-          GathererClass = gathererDefn.implementation;
-        } else {
+        } else if (gathererDefn.implementation) {
+          const GathererClass = gathererDefn.implementation;
+          return {
+            instance: new GathererClass(),
+            implementation: gathererDefn.implementation,
+            path: gathererDefn.path,
+            options: gathererDefn.options || {},
+          };
+        } else if (gathererDefn.path) {
           // See if the gatherer is a Lighthouse core gatherer
-          const name = gathererDefn.path;
-          const coreGatherer = coreList.find(a => a === `${name}.js`);
+          const path = gathererDefn.path;
+          const coreGatherer = coreList.find(a => a === `${path}.js`);
 
-          let requirePath = `../gather/gatherers/${name}`;
+          let requirePath = `../gather/gatherers/${path}`;
           if (!coreGatherer) {
             // Otherwise, attempt to find it elsewhere. This throws if not found.
-            requirePath = Runner.resolvePlugin(name, configPath, 'gatherer');
+            requirePath = Runner.resolvePlugin(path, configPath, 'gatherer');
           }
 
-          GathererClass = /** @type {GathererConstructor} */ (require(requirePath));
-          path = name;
-        }
+          const GathererClass = /** @type {GathererConstructor} */ (require(requirePath));
 
-        return {
-          instance: new GathererClass(),
-          implementation: GathererClass,
-          path,
-          options: gathererDefn.options || {},
-        };
+          return {
+            instance: new GathererClass(),
+            implementation: GathererClass,
+            path,
+            options: gathererDefn.options || {},
+          };
+        } else {
+          throw new Error('Invalid expanded Gatherer: ' + JSON.stringify(gathererDefn));
+        }
       });
 
       const mergedDefns = mergeOptionsOfItems(gathererDefns);
@@ -776,31 +786,6 @@ class Config {
     });
 
     return fullPasses;
-  }
-
-  /** @type {LH.Config['passes']} */
-  get passes() {
-    return this._passes;
-  }
-
-  /** @type {LH.Config['audits']} */
-  get audits() {
-    return this._audits;
-  }
-
-  /** @type {LH.Config['categories']} */
-  get categories() {
-    return this._categories;
-  }
-
-  /** @type {LH.Config['groups']} */
-  get groups() {
-    return this._groups;
-  }
-
-  /** @type {LH.Config['settings']} */
-  get settings() {
-    return this._settings;
   }
 }
 

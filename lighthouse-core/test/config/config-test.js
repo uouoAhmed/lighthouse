@@ -204,8 +204,47 @@ describe('Config', () => {
     }), /meta.description property/);
 
     assert.throws(_ => new Config({
+      audits: [
+        class BinaryButNoFailureDescAudit extends Audit {
+          static get meta() {
+            return {
+              name: 'no-failure-description',
+              description: 'description',
+              helpText: 'help',
+              requiredArtifacts: [],
+              scoreDisplayMode: 'binary',
+            };
+          }
+
+          static audit() {
+            throw new Error('Unimplemented');
+          }
+        },
+      ],
+    }), /no failureDescription and should/);
+
+    assert.throws(_ => new Config({
       audits: [basePath + '/missing-help-text'],
     }), /meta.helpText property/);
+
+    assert.throws(_ => new Config({
+      audits: [
+        class EmptyStringHelpTextAudit extends Audit {
+          static get meta() {
+            return {
+              name: 'empty-string-help-text',
+              description: 'description',
+              helpText: '',
+              requiredArtifacts: [],
+            };
+          }
+
+          static audit() {
+            throw new Error('Unimplemented');
+          }
+        },
+      ],
+    }), /empty meta.helpText string/);
 
     assert.throws(_ => new Config({
       audits: [basePath + '/missing-required-artifacts'],
@@ -533,6 +572,27 @@ describe('Config', () => {
     assert.ok(typeof config.settings.maxWaitForLoad === 'number', 'missing setting from default');
   });
 
+  it('is idempotent when accepting a canonicalized Config as valid ConfigJson input', () => {
+    const config = new Config(defaultConfig);
+    const configAgain = new Config(config);
+    assert.deepEqual(config, configAgain);
+  });
+
+  it('is idempotent accepting a canonicalized filtered Config as valid ConfigJson input', () => {
+    const extendedJson = {
+      extends: 'lighthouse:default',
+      settings: {
+        onlyCategories: ['pwa'],
+      },
+    };
+    const config = new Config(extendedJson);
+    assert.equal(config.passes.length, 3, 'did not filter config');
+    assert.equal(Object.keys(config.categories).length, 1, 'did not filter config');
+    assert.deepEqual(config.settings.onlyCategories, ['pwa']);
+    const configAgain = new Config(config);
+    assert.deepEqual(config, configAgain);
+  });
+
   describe('#extendConfigJSON', () => {
     it('should merge passes', () => {
       const configA = {
@@ -736,6 +796,15 @@ describe('Config', () => {
       assert.deepEqual(mergedJson,
         [{path: 'user-timings', options: {}}, {path: 'is-on-https', options: {x: 2, y: 1}}]);
     });
+
+    it('throws for invalid auditDefns', () => {
+      const configJson = {
+        audits: [
+          new Gatherer(),
+        ],
+      };
+      assert.throws(_ => new Config(configJson), /Invalid Audit type/);
+    });
   });
 
   describe('#requireGatherers', () => {
@@ -789,6 +858,20 @@ describe('Config', () => {
       assert.equal(typeof gatherer.instance.beforePass, 'function');
     });
 
+    it('returns gatherer when gatherer instance, not package-name string, is provided', () => {
+      class TestGatherer extends Gatherer {}
+      const gatherer = loadGatherer(new TestGatherer());
+      assert.equal(gatherer.instance.name, 'TestGatherer');
+      assert.equal(typeof gatherer.instance.beforePass, 'function');
+    });
+
+    it('returns gatherer when `gathererDefn` with instance is provided', () => {
+      class TestGatherer extends Gatherer {}
+      const gatherer = loadGatherer({instance: new TestGatherer()});
+      assert.equal(gatherer.instance.name, 'TestGatherer');
+      assert.equal(typeof gatherer.instance.beforePass, 'function');
+    });
+
     it('throws when a gatherer is not found', () => {
       assert.throws(_ => loadGatherer('/fake-non-existent-gatherer'), /locate gatherer/);
     });
@@ -821,6 +904,13 @@ describe('Config', () => {
             // our own custom locate gatherer error, not the usual MODULE_NOT_FOUND.
             return !/locate gatherer/.test(err) && err.code === 'MODULE_NOT_FOUND';
           });
+    });
+
+    it('throws for invalid gathererDefns', () => {
+      class TestGatherer extends Gatherer {}
+      assert.throws(_ => loadGatherer({path: new TestGatherer()}), /Invalid Gatherer type/);
+
+      assert.throws(_ => loadGatherer(new Audit()), /Invalid Gatherer type/);
     });
 
     it('throws for invalid gatherers', () => {
