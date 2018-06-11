@@ -104,11 +104,10 @@ function convertNodeTimingsToTrace(nodeTimings) {
     ];
 
     const nestedBaseTs = cpuNode.event.ts || 0;
-    const multiplier = (timing.endTime - timing.startTime) / cpuNode.event.dur;
-    for (let event of cpuNode.childEvents) {
-      if (event.cat !== 'devtools.timeline') continue;
+    const multiplier = (timing.endTime - timing.startTime) * 1000 / cpuNode.event.dur;
+    for (const event of cpuNode.childEvents) {
       const ts = eventTs + (event.ts - nestedBaseTs) * multiplier;
-      const newEvent = {...event, ...baseEvent, ts};
+      const newEvent = {...event, ...{pid: baseEvent.pid, tid: baseEvent.tid}, ts};
       if (event.dur) newEvent.dur = event.dur * multiplier;
       events.push(newEvent);
     }
