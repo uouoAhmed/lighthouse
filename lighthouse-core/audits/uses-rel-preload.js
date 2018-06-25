@@ -65,7 +65,7 @@ class UsesRelPreloadAudit extends Audit {
    * @return {boolean}
    */
   static shouldPreload(request, mainResource) {
-    if (request._isLinkPreload || request.protocol === 'data' || request.protocol === 'blob') {
+    if (request._isLinkPreload || URL.NON_NETWORK_PROTOCOLS.includes(request.protocol)) {
       return false;
     }
 
