@@ -125,7 +125,7 @@ function getFontFaceFromStylesheets() {
       newNode.addEventListener('load', function onload() {
         newNode.removeEventListener('load', onload);
         try {
-          const stylesheet = Array.from(document.styleSheets).find(sheet => sheet.ownerNode === newNode);
+          const stylesheet = Array.from(document.styleSheets).find(sh => sh.ownerNode === newNode);
           if (stylesheet) {
             const cssStylesheet = /** @type {CSSStyleSheet} */ (stylesheet);
             resolve(getSheetsFontFaces(cssStylesheet));
