@@ -257,9 +257,11 @@ async function initPopup() {
   // bind Generate Report button
   const generateReportButton = find('#generate-report');
   generateReportButton.addEventListener('click', () => {
-    background.loadSettings().then(settings => {
-      onGenerateReportButtonClick(background, settings);
-    });
+    if (!background.isRunning()) {
+      background.loadSettings().then(settings => {
+        onGenerateReportButtonClick(background, settings);
+      });
+    }
   });
 
   // bind View Options button
